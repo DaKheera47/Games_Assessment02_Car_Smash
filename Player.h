@@ -20,9 +20,9 @@ public:
 	void HandleMovement(I3DEngine* myEngine, float deltaTime);
 	IModel* GetModel();
 	float GetRadius();
-	void Player::SetPosition(SVector3 position);
-	void Player::SetSpeed(float speed);
-	void Player::UndoLastMovement();
+	void SetPosition(SVector3 position);
+	void SetSpeed(float speed);
+	void UndoLastMovement();
 
 	SVector3 GetPostion();
 
