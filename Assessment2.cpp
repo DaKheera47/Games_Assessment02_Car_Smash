@@ -14,7 +14,7 @@ using namespace tle;
 
 constexpr int fontSize = 36;
 const string fontName = "Red Hat Display";
-const int numStaticEnemies = 2;
+const int numStaticEnemies = 4;
 
 void main()
 {
@@ -37,18 +37,8 @@ void main()
 	IMesh* ballMesh = myEngine->LoadMesh("ball.x");
 	IMesh* cubeMesh = myEngine->LoadMesh("cube.x");
 
-	//int locations[numStaticEnemies][3] = { { -20, 0, 20 }, { 20, 0, 20 }, { -20, 0, -20 }, { 20, 0, -20 } };
-	int locations[numStaticEnemies][3] = { { -20, 0, 20 }, { 20, 0, 20 } };
-	//StaticEnemy staticEnemies[numStaticEnemies];
+	int locations[numStaticEnemies][3] = { { -20, 0, 20 }, { 20, 0, 20 }, { -20, 0, -20 }, { 20, 0, -20 } };
 
-	//for (int i = 0; i < numStaticEnemies; i++)
-	//{
-	//	StaticEnemy enemy = StaticEnemy(audiMesh, ballMesh, locations[i]);
-	//	staticEnemies[i] = enemy;
-
-	//	// create all static enemies
-	//	staticEnemies[i].Create();
-	//}
 	StaticEnemy* staticEnemies[numStaticEnemies];
 
 	for (int i = 0; i < numStaticEnemies; i++)
