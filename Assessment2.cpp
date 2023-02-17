@@ -56,13 +56,10 @@ void main()
 	Player player = Player(jeep, 100, 10, 15, 10, 10);
 
 	// create a kManual camera at(0, 15.0f, -60.0f) and rotate it by 15 degrees about its x - axis
-	//ICamera* camera = myEngine->CreateCamera(kManual, 0, 15.0f, -60.0f);
-	ICamera* camera = myEngine->CreateCamera(kFPS, 0, 5.0f, -10.0f);
-	camera->RotateX(15.0f);
-	camera->AttachToParent(player.GetModel());
-
-	// frametime
-	float frameTime = myEngine->Timer();
+	ICamera* camera = myEngine->CreateCamera(kManual);
+	//ICamera* camera = myEngine->CreateCamera(kFPS, 0, 0, 0);
+	//camera->RotateX(15.0f);
+	//camera->AttachToParent(player.GetModel());
 
 	// variables to draw text to the screen
 	// get screen center coords
@@ -77,6 +74,9 @@ void main()
 	// encapsulates most game states
 	Game game = Game();
 
+	// frametime
+	float frameTime = myEngine->Timer();
+
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
 	{
@@ -85,7 +85,8 @@ void main()
 		// frametime
 		frameTime = myEngine->Timer();
 
-		game.HandleKeypresses(myEngine, frameTime);
+		// ask the game class to handle all game state changes
+		game.HandleGameStates(myEngine, frameTime);
 
 		// don't calculate anything else
 		if (game.GetGameState() == PAUSED)
@@ -94,6 +95,9 @@ void main()
 			redHatFont->Draw("Game Paused!", kScreenHorizHalf, kScreenVertHalf, kYellow, kCentre);
 			continue;
 		}
+
+		// ask the game class to handle all camera angle changes
+		game.HandleCameraAngles(myEngine, camera, player.GetModel());
 
 		stringstream ss;
 		ss << game.GetScore();

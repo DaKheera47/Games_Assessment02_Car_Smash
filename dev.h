@@ -4,6 +4,6 @@
 #include "enums.h";
 
 void PrintBoundingBox(BoundingBox bbox);
-void PrintVector(SVector3 vector);
+void PrintVector(SVector3 vector, string message);
 
 #endif // DEV

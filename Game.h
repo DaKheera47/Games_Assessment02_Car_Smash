@@ -10,18 +10,14 @@ using namespace tle;
 class Game
 {
 public:
-	Game()
-	{
-		m_gameState = PLAYING;
-		m_cameraAngle = CHASE;
-		m_score = 0;
-	}
+	Game();
 
 	GAME_STATE GetGameState();
 	float GetScore();
 	float UpdateScore(float score);
-	
-	void HandleKeypresses(I3DEngine* myEngine, float deltaTime);
+
+	void HandleGameStates(I3DEngine* myEngine, float deltaTime);
+	void HandleCameraAngles(I3DEngine* myEngine, ICamera* camera, IModel* anchor);
 
 	~Game()
 	{

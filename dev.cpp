@@ -16,10 +16,10 @@ void PrintBoundingBox(BoundingBox bbox)
 	cout << endl;
 }
 
-void PrintVector(SVector3 vector)
+void PrintVector(SVector3 vector, string message = "")
 {
 	// Print the vector
-	cout << "Vector: " << endl;
+	cout << "Vector: " << message << endl;
 	cout << "x: " << vector.x << endl;
 	cout << "y: " << vector.y << endl;
 	cout << "z: " << vector.z << endl;

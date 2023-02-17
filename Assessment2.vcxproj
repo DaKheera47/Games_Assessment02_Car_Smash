@@ -141,6 +141,7 @@ copy "C:\ProgramData\TL-Engine\3rd Party\TL-Xtreme\shader\*.*" "$(OutDir)" &gt; 
     <ClInclude Include="enums.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="helpers.h" />
+    <ClInclude Include="VARS.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="StaticEnemy.h" />
   </ItemGroup>
