@@ -17,6 +17,13 @@ Game::Game(I3DEngine* myEngine)
 	m_score = 0;
 
 	m_font = myEngine->LoadFont(fontName, fontSize);
+
+	// variables to draw text to the screen
+	// get screen center coords
+	m_screenWidth = myEngine->GetWidth();
+	m_screenHeight = myEngine->GetHeight();
+	// calculating half vertical and half horizontal from edges to position text in middle of the screen
+	m_kScreenHorizHalf = m_screenWidth / 2, m_kScreenVertHalf = m_screenHeight / 2;
 }
 
 void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)

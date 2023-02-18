@@ -33,6 +33,11 @@ private:
 
 	IFont* m_font;
 
+	// variables to draw text to the screen
+	float m_screenWidth;
+	float m_screenHeight;
+	float m_kScreenHorizHalf;
+	float m_kScreenVertHalf;
 };
 
 

@@ -2,31 +2,14 @@
 using namespace tle;
 
 #include "enums.h";
+#include "Enemy.h";
 
 #ifndef STATICENEMY_H
 #define STATICENEMY_H
 
-class StaticEnemy {
+class StaticEnemy : public Enemy {
 public:
-	StaticEnemy();
-	StaticEnemy(IMesh* carMesh, IMesh* ballMesh, int location[3]);
-	~StaticEnemy();
-	void HandleCollision();
-	void Create();
-	bool HasEverBeenHit();
-	BoundingBox GetBBox();
-	IModel* GetModel();
-
-private:
-	IMesh* m_carMesh;
-	IMesh* m_ballMesh;
-	int m_location[3];
-	bool m_hasEverBeenHit;
-
-	IModel* m_ballModel;
-	IModel* m_carModel;
-
-	BoundingBox m_bbox;
+	StaticEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location);
 };
 
 #endif // STATICENEMY_H

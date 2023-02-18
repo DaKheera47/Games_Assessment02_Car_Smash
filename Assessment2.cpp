@@ -10,10 +10,12 @@ using namespace tle;
 #include "Assessment2.h";
 #include "helpers.h";
 #include "Game.h";
+#include "MovingEnemy.h";
 
 constexpr int fontSize = 36;
 const string fontName = "Red Hat Display";
 const int numStaticEnemies = 4;
+const int numMovingEnemies = 4;
 
 void main()
 {
@@ -35,7 +37,13 @@ void main()
 	IMesh* audiMesh = myEngine->LoadMesh("audi.x");
 	IMesh* ballMesh = myEngine->LoadMesh("ball.x");
 
-	int locations[numStaticEnemies][3] = { { -20, 0, 20 }, { 20, 0, 20 }, { -20, 0, -20 }, { 20, 0, -20 } };
+	// static cars
+	SVector3 locations[numStaticEnemies] = {
+		{ -20, 0, 20 },
+		{ 20, 0, 20 },
+		{ -20, 0, -20 }, 
+		{ 20, 0, -20 }
+	};
 
 	StaticEnemy* staticEnemies[numStaticEnemies];
 
@@ -48,23 +56,46 @@ void main()
 		staticEnemies[i]->Create();
 	}
 
+	// moving cars
+	SVector3 movingEnemyLocations[numMovingEnemies][2] = {
+		{
+			{-30, 0, 15},
+			{30, 0, 15}
+		},
+		{
+			{30, 0, -15},
+			{-30, 0, -15}
+		},
+		{
+			{30, 0, 30},
+			{-30, 0, 30}
+		},
+		{
+			{-30, 0, -30},
+			{30, 0, -30}
+		},
+	};
+
+	// load estate.x
+	IMesh* estateMesh = myEngine->LoadMesh("estate.x");
+
+	MovingEnemy* movingEnemies[numMovingEnemies];
+
+	for (int i = 0; i < numMovingEnemies; i++)
+	{
+		MovingEnemy* enemy = new MovingEnemy(estateMesh, ballMesh, movingEnemyLocations[i][0]);
+		movingEnemies[i] = enemy;
+
+		// create all moving enemies
+		movingEnemies[i]->Create();
+	}
+
 	// create player
 	IMesh* jeepMesh = myEngine->LoadMesh("4x4jeep.x");
 	IModel* jeep = jeepMesh->CreateModel(0, 0, 0);
 	Player player = Player(jeep, 100, 10, 50, 15, 10);
 
-	// create a kManual camera at(0, 15.0f, -60.0f) and rotate it by 15 degrees about its x - axis
 	ICamera* camera = myEngine->CreateCamera(kManual);
-	//ICamera* camera = myEngine->CreateCamera(kFPS, 0, 0, 0);
-	//camera->RotateX(15.0f);
-	//camera->AttachToParent(player.GetModel());
-
-	// variables to draw text to the screen
-	// get screen center coords
-	const float screenWidth = myEngine->GetWidth();
-	const float screenHeight = myEngine->GetHeight();
-	// calculating half vertical and half horizontal from edges to position text in middle of the screen
-	const float kScreenHorizHalf = screenWidth / 2, kScreenVertHalf = screenHeight / 2;
 
 	// encapsulates most game states & other global actions
 	Game game = Game(myEngine);
@@ -126,6 +157,13 @@ void main()
 			}
 
 			currEnemy.HandleCollision();
+		}
+	
+		for (int i = 0; i < numMovingEnemies; i++)
+		{
+			MovingEnemy& currEnemy = *movingEnemies[i];
+
+			currEnemy.HandleMovement();
 		}
 	}
 
