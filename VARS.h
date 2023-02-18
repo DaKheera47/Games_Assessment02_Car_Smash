@@ -3,7 +3,14 @@
 
 #include <TL-Engine.h>
 using namespace tle;
-#include "enums.h";
+
+// font options
+
+constexpr int fontSize = 36;
+const string fontName = "Red Hat Display";
+
+// enemy options
+const int numStaticEnemies = 4;
 
 
 // game control keys

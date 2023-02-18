@@ -3,7 +3,6 @@
 #include <TL-Engine.h>	// TL-Engine include file and namespace
 #include <iostream>
 #include <array>
-#include <sstream>
 using namespace tle;
 
 #include "Player.h";
@@ -35,7 +34,6 @@ void main()
 
 	IMesh* audiMesh = myEngine->LoadMesh("audi.x");
 	IMesh* ballMesh = myEngine->LoadMesh("ball.x");
-	IMesh* cubeMesh = myEngine->LoadMesh("cube.x");
 
 	int locations[numStaticEnemies][3] = { { -20, 0, 20 }, { 20, 0, 20 }, { -20, 0, -20 }, { 20, 0, -20 } };
 
@@ -53,7 +51,7 @@ void main()
 	// create player
 	IMesh* jeepMesh = myEngine->LoadMesh("4x4jeep.x");
 	IModel* jeep = jeepMesh->CreateModel(0, 0, 0);
-	Player player = Player(jeep, 100, 10, 15, 10, 10);
+	Player player = Player(jeep, 100, 10, 50, 15, 10);
 
 	// create a kManual camera at(0, 15.0f, -60.0f) and rotate it by 15 degrees about its x - axis
 	ICamera* camera = myEngine->CreateCamera(kManual);
@@ -68,11 +66,8 @@ void main()
 	// calculating half vertical and half horizontal from edges to position text in middle of the screen
 	const float kScreenHorizHalf = screenWidth / 2, kScreenVertHalf = screenHeight / 2;
 
-	// loading the font to render text on screen
-	IFont* redHatFont = myEngine->LoadFont(fontName, fontSize);
-
-	// encapsulates most game states
-	Game game = Game();
+	// encapsulates most game states & other global actions
+	Game game = Game(myEngine);
 
 	// frametime
 	float frameTime = myEngine->Timer();
@@ -91,17 +86,16 @@ void main()
 		// don't calculate anything else
 		if (game.GetGameState() == PAUSED)
 		{
+			// render game paused text
+			game.DrawText("Game Paused", kCentre);
 			// if paused, then don't update game elements
-			redHatFont->Draw("Game Paused!", kScreenHorizHalf, kScreenVertHalf, kYellow, kCentre);
 			continue;
 		}
 
 		// ask the game class to handle all camera angle changes
 		game.HandleCameraAngles(myEngine, camera, player.GetModel());
 
-		stringstream ss;
-		ss << game.GetScore();
-		redHatFont->Draw(ss.str(), 0, 0, kYellow, kLeft);
+		game.DrawText(game.GetScore(), kCentre);
 
 		/**** Update your scene each frame here ****/
 		player.HandleMovement(myEngine, frameTime);

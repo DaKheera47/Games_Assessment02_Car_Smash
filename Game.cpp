@@ -1,16 +1,22 @@
 #include <TL-Engine.h>
+#include <sstream>
+#include <cmath>
 using namespace tle;
 
 #include "Game.h";
 #include "VARS.h";
-#include "enums.h";
-#include "dev.h"
+#include "dev.h";
+#include <iostream>
 
-Game::Game()
+Game::Game(I3DEngine* myEngine)
 {
+	m_font = myEngine->LoadFont("Red Hat Display", 36);
+
 	m_gameState = PLAYING;
 	m_cameraAngle = CHASE;
 	m_score = 0;
+
+	m_font = myEngine->LoadFont(fontName, fontSize);
 }
 
 void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)
@@ -108,10 +114,37 @@ float Game::UpdateScore(float score)
 
 float Game::GetScore()
 {
-	return m_score;
+	cout << "Score: " << to_string(round(m_score)) << endl;
+	return round(m_score);
 }
 
 GAME_STATE Game::GetGameState()
 {
 	return m_gameState;
+}
+
+void Game::DrawText(float text, EHorizAlignment align)
+{
+	stringstream ss{};
+	ss << text;
+
+	cout << ss.str() << endl;
+
+	if (!ss.str().empty())
+	{
+		m_font->Draw(ss.str(), 0, 0, kBlack, kLeft);
+	}
+}
+
+void Game::DrawText(string text, EHorizAlignment align)
+{
+	stringstream ss{};
+	ss << text;
+
+	cout << ss.str() << endl;
+
+	if (!ss.str().empty())
+	{
+		m_font->Draw(ss.str(), 0, 0, kBlack, kLeft);
+	}
 }
