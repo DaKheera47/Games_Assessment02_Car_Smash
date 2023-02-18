@@ -50,7 +50,7 @@ void Enemy::Create()
 {
 	m_carModel = m_carMesh->CreateModel(m_location.x, m_location.y, m_location.z);
 	m_ballModel = m_ballMesh->CreateModel(0, 5, 0);
-	m_ballModel->SetSkin("white.jpg");
+	m_ballModel->SetSkin("white.png");
 	m_ballModel->AttachToParent(m_carModel);
 }
 

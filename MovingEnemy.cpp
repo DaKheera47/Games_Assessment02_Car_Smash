@@ -5,7 +5,8 @@ using namespace tle;
 
 #include "helpers.h";
 #include "enums.h";
-#include "dev.h"
+#include "dev.h";
+#include "VARS.h";
 
 MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 initialLocation, SVector3 minBound, SVector3 maxBound)
 	: Enemy(carMesh, ballMesh, initialLocation) {
@@ -49,6 +50,8 @@ void MovingEnemy::FaceRight(float frameTime)
 
 void MovingEnemy::HandleMovement(float frameTime)
 {
+	if (m_hasEverBeenHit) return;
+
 	SVector3 currPostion = { m_carModel->GetX(), m_carModel->GetY(), m_carModel->GetZ() };
 
 	if (currPostion.x < m_minBound.x) {
@@ -70,4 +73,38 @@ void MovingEnemy::HandleMovement(float frameTime)
 
 	// Move the enemy left
 	m_carModel->MoveLocalZ(5.0f * frameTime);
+}
+
+void MovingEnemy::SetState(MOVING_ENEMY_STATE state)
+{
+	if (state == NOT_HIT)
+	{
+		m_hasEverBeenHit = false;
+		m_ballModel->SetSkin("white.png");
+		m_timeSinceHit = 0.0f;
+	}
+	else if (state == HIT)
+	{
+		m_hasEverBeenHit = true;
+		m_ballModel->SetSkin("red.png");
+	}
+}
+
+void MovingEnemy::HandleCollision(bool isColliding, float frameTime)
+{
+	if (m_hasEverBeenHit)
+	{
+		m_timeSinceHit += frameTime;
+	}
+
+	if (m_timeSinceHit > ENEMY_RECOVERY_TIME) {
+		SetState(NOT_HIT);
+	}
+
+	if (!isColliding) return;
+
+	// if the enemy has been hit, and the time since the enemy has been hit is greater than 15 seconds, reset the enemy
+	if (m_hasEverBeenHit == false) {
+		SetState(HIT);
+	}
 }

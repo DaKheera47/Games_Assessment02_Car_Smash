@@ -11,11 +11,7 @@ using namespace tle;
 #include "helpers.h";
 #include "Game.h";
 #include "MovingEnemy.h";
-
-constexpr int fontSize = 36;
-const string fontName = "Red Hat Display";
-const int numStaticEnemies = 4;
-const int numMovingEnemies = 4;
+#include "VARS.h";
 
 void main()
 {
@@ -29,63 +25,31 @@ void main()
 
 	/**** Set up your scene here ****/
 	IMesh* groundMesh = myEngine->LoadMesh("ground.x");
-	IModel* ground = groundMesh->CreateModel(0, 0, 0);
+	IModel* ground = groundMesh->CreateModel(ORIGIN.x, ORIGIN.y, ORIGIN.z);
 
 	IMesh* skyboxMesh = myEngine->LoadMesh("skybox01.x");
-	IModel* skybox = skyboxMesh->CreateModel(0, -960.0f, 0);
+	IModel* skybox = skyboxMesh->CreateModel(skyboxLocation.x, skyboxLocation.y, skyboxLocation.z);
 
 	IMesh* audiMesh = myEngine->LoadMesh("audi.x");
 	IMesh* ballMesh = myEngine->LoadMesh("ball.x");
 
 	// static cars
-	SVector3 locations[numStaticEnemies] = {
-		{ -20, 0, 20 },
-		{ 20, 0, 20 },
-		{ -20, 0, -20 }, 
-		{ 20, 0, -20 }
-	};
-
 	StaticEnemy* staticEnemies[numStaticEnemies];
 
 	for (int i = 0; i < numStaticEnemies; i++)
 	{
-		StaticEnemy* enemy = new StaticEnemy(audiMesh, ballMesh, locations[i]);
+		StaticEnemy* enemy = new StaticEnemy(audiMesh, ballMesh, staticEnemyLocations[i]);
 		staticEnemies[i] = enemy;
 
 		// create all static enemies
 		staticEnemies[i]->Create();
 	}
 
-	// moving cars
-	// initial position, min bound, max bound
-	SVector3 movingEnemyLocations[numMovingEnemies][3] = {
-		{
-			{-30, 0, 15},
-			{-30, 0, 15},
-			{30, 0, 15}
-		},
-		{
-			{30, 0, -15},
-			{-30, 0, -15},
-			{30, 0, -15},
-		},
-		{
-			{30, 0, 30},
-			{-30, 0, 30},
-			{30, 0, 30},
-		},
-		{
-			{-30, 0, -30},
-			{-30, 0, -30},
-			{30, 0, -30}
-		},
-	};
-
 	// load estate.x
 	IMesh* estateMesh = myEngine->LoadMesh("estate.x");
 
+	// creating moving enemies
 	MovingEnemy* movingEnemies[numMovingEnemies];
-
 	for (int i = 0; i < numMovingEnemies; i++)
 	{
 		movingEnemies[i] = new MovingEnemy(estateMesh, ballMesh, movingEnemyLocations[i][0], movingEnemyLocations[i][1], movingEnemyLocations[i][2]);
@@ -96,9 +60,10 @@ void main()
 
 	// create player
 	IMesh* jeepMesh = myEngine->LoadMesh("4x4jeep.x");
-	IModel* jeep = jeepMesh->CreateModel(0, 0, 0);
-	Player player = Player(jeep, 100, 10, 50, 15, 10);
+	IModel* jeep = jeepMesh->CreateModel(initPlayerLocation.x, initPlayerLocation.y, initPlayerLocation.z);
+	Player player = Player(jeep, initPlayerHealth, initPlayerSpeed, maxPlayerSpeed, playerAcceleration, playerDeceleration);
 
+	// creating a default camera
 	ICamera* camera = myEngine->CreateCamera(kManual);
 
 	// encapsulates most game states & other global actions
@@ -130,9 +95,9 @@ void main()
 		// ask the game class to handle all camera angle changes
 		game.HandleCameraAngles(myEngine, camera, player.GetModel());
 
+		// render score on screen
 		game.DrawText(game.GetScore(), kCentre);
 
-		/**** Update your scene each frame here ****/
 		player.HandleMovement(myEngine, frameTime);
 
 		// check collision
@@ -153,21 +118,48 @@ void main()
 
 				if (dotProduct < 0.5 && dotProduct > -0.5)
 				{
-					game.UpdateScore(15.0f);
+					game.UpdateScore(SIDE_IMPACT_SCORE_INCREASE);
 				}
 				else {
-					game.UpdateScore(10.0f);
+					game.UpdateScore(FB_IMPACT_SCORE_INCREASE);
 				}
 			}
 
 			currEnemy.HandleCollision();
 		}
-	
+
 		for (int i = 0; i < numMovingEnemies; i++)
 		{
 			MovingEnemy& currEnemy = *movingEnemies[i];
 
 			currEnemy.HandleMovement(frameTime);
+
+			// check collision
+			bool isColliding = BoxToSphere(player.GetRadius(), player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());
+
+			// handle collision
+			currEnemy.HandleCollision(isColliding, frameTime);
+
+			// don't continue if the enemy and player aren't colliding
+			if (!isColliding) continue;
+
+			// reset player movement, and reverst last movement for collision detection
+			player.SetSpeed(0);
+			//player.UndoLastMovement();
+
+			// don't continue if this enemy has been hit before
+			if (currEnemy.HasEverBeenHit()) continue;
+
+			// calculate dot product, and add points based on that
+			float dotProduct = calculateDotProduct(player.GetModel(), currEnemy.GetModel());
+
+			if (dotProduct < 0.5 && dotProduct > -0.5)
+			{
+				game.UpdateScore(SIDE_IMPACT_SCORE_INCREASE);
+			}
+			else {
+				game.UpdateScore(FB_IMPACT_SCORE_INCREASE);
+			}
 		}
 	}
 
