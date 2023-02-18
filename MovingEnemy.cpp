@@ -5,9 +5,10 @@ using namespace tle;
 
 #include "helpers.h";
 #include "enums.h";
+#include "dev.h"
 
-MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location)
-	: Enemy(carMesh, ballMesh, location) {
+MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 initialLocation, SVector3 minBound, SVector3 maxBound)
+	: Enemy(carMesh, ballMesh, initialLocation) {
 	float minX = -0.946118f;
 	float maxX = 0.946118f;
 	float minY = 0.0065695f;
@@ -23,15 +24,50 @@ MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location)
 
 	m_bbox.minZ = minZ;
 	m_bbox.maxZ = maxZ;
+
+	m_minBound = minBound;
+	m_maxBound = maxBound;
 }
 
-void MovingEnemy::HandleMovement()
+void MovingEnemy::FaceLeft(float frameTime)
 {
-	// Move the enemy forward
-	m_carModel->MoveLocalZ(0.01f);
+	// reset rotation
+	m_carModel->ResetOrientation();
 
-	// If the enemy is off the track, move it back to the start
-	if (m_carModel->GetX() > 100 || m_carModel->GetX() < -100 || m_carModel->GetZ() > 100 || m_carModel->GetZ() < -100) {
-		m_carModel->SetPosition(0, 0, 0);
+	// rotate the enemy
+	m_carModel->RotateY(-90.0f);
+}
+
+void MovingEnemy::FaceRight(float frameTime)
+{
+	// reset rotation
+	m_carModel->ResetOrientation();
+
+	// rotate the enemy
+	m_carModel->RotateY(90.0f);
+}
+
+void MovingEnemy::HandleMovement(float frameTime)
+{
+	SVector3 currPostion = { m_carModel->GetX(), m_carModel->GetY(), m_carModel->GetZ() };
+
+	if (currPostion.x < m_minBound.x) {
+		m_direction = RIGHT;
 	}
+
+	if (currPostion.x > m_maxBound.x) {
+		m_direction = LEFT;
+	}
+
+	if (m_direction == LEFT)
+	{
+		FaceLeft(frameTime);
+	}
+	else if (m_direction == RIGHT)
+	{
+		FaceRight(frameTime);
+	}
+
+	// Move the enemy left
+	m_carModel->MoveLocalZ(5.0f * frameTime);
 }

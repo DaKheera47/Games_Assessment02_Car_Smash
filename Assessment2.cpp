@@ -57,20 +57,25 @@ void main()
 	}
 
 	// moving cars
-	SVector3 movingEnemyLocations[numMovingEnemies][2] = {
+	// initial position, min bound, max bound
+	SVector3 movingEnemyLocations[numMovingEnemies][3] = {
 		{
+			{-30, 0, 15},
 			{-30, 0, 15},
 			{30, 0, 15}
 		},
 		{
 			{30, 0, -15},
-			{-30, 0, -15}
+			{-30, 0, -15},
+			{30, 0, -15},
 		},
 		{
 			{30, 0, 30},
-			{-30, 0, 30}
+			{-30, 0, 30},
+			{30, 0, 30},
 		},
 		{
+			{-30, 0, -30},
 			{-30, 0, -30},
 			{30, 0, -30}
 		},
@@ -83,8 +88,7 @@ void main()
 
 	for (int i = 0; i < numMovingEnemies; i++)
 	{
-		MovingEnemy* enemy = new MovingEnemy(estateMesh, ballMesh, movingEnemyLocations[i][0]);
-		movingEnemies[i] = enemy;
+		movingEnemies[i] = new MovingEnemy(estateMesh, ballMesh, movingEnemyLocations[i][0], movingEnemyLocations[i][1], movingEnemyLocations[i][2]);
 
 		// create all moving enemies
 		movingEnemies[i]->Create();
@@ -163,7 +167,7 @@ void main()
 		{
 			MovingEnemy& currEnemy = *movingEnemies[i];
 
-			currEnemy.HandleMovement();
+			currEnemy.HandleMovement(frameTime);
 		}
 	}
 

@@ -121,7 +121,6 @@ float Game::UpdateScore(float score)
 
 float Game::GetScore()
 {
-	cout << "Score: " << to_string(round(m_score)) << endl;
 	return round(m_score);
 }
 
@@ -134,8 +133,6 @@ void Game::DrawText(float text, EHorizAlignment align)
 {
 	stringstream ss{};
 	ss << text;
-
-	cout << ss.str() << endl;
 
 	if (!ss.str().empty())
 	{
