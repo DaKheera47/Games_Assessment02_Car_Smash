@@ -77,6 +77,7 @@ void main()
 	{
 		// Draw the scene
 		myEngine->DrawScene();
+
 		// frametime
 		frameTime = myEngine->Timer();
 
@@ -96,7 +97,7 @@ void main()
 		game.HandleCameraAngles(myEngine, camera, player.GetModel());
 
 		// render score on screen
-		game.DrawText(game.GetScore(), kCentre);
+		game.DrawScore(kCentre);
 
 		player.HandleMovement(myEngine, frameTime);
 
@@ -110,7 +111,7 @@ void main()
 			if (!isColliding) continue;
 
 			player.SetSpeed(0);
-			player.UndoLastMovement();
+			//player.UndoLastMovement();
 
 			if (!currEnemy.HasEverBeenHit())
 			{

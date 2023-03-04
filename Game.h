@@ -22,6 +22,8 @@ public:
 	void DrawText(string text, EHorizAlignment align);
 	void DrawText(float text, EHorizAlignment align);
 
+	void DrawScore(EHorizAlignment align);
+
 	~Game()
 	{
 	}
@@ -36,8 +38,8 @@ private:
 	// variables to draw text to the screen
 	float m_screenWidth;
 	float m_screenHeight;
-	float m_kScreenHorizHalf;
-	float m_kScreenVertHalf;
+	float m_screenHorizHalf;
+	float m_screenVertHalf;
 };
 
 

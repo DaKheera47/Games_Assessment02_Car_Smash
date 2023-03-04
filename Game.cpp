@@ -23,7 +23,15 @@ Game::Game(I3DEngine* myEngine)
 	m_screenWidth = myEngine->GetWidth();
 	m_screenHeight = myEngine->GetHeight();
 	// calculating half vertical and half horizontal from edges to position text in middle of the screen
-	m_kScreenHorizHalf = m_screenWidth / 2, m_kScreenVertHalf = m_screenHeight / 2;
+	m_screenHorizHalf = m_screenWidth / 2, m_screenVertHalf = m_screenHeight / 2;
+	float halfBackdropWidth = backdropWidth / 2;
+
+	// calculating the position
+	float horizPos = m_screenHorizHalf - halfBackdropWidth;
+	float vertPos = m_screenHeight - backdropHeight;
+
+	// create and show backdrop.png as a sprite
+	ISprite* backdrop = myEngine->CreateSprite(backdropName, horizPos, vertPos);
 }
 
 void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)
@@ -133,10 +141,23 @@ void Game::DrawText(float text, EHorizAlignment align)
 {
 	stringstream ss{};
 	ss << text;
+	// position it perfectly in the middle of the backdrop image
+	float m_textVertPos = m_screenHeight - (backdropHeight / 1.25);
 
 	if (!ss.str().empty())
 	{
-		m_font->Draw(ss.str(), 0, 0, kBlack, kLeft);
+		if (align == kCentre)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf, m_textVertPos, kBlack, kCentre);
+		}
+		else if (align == kLeft)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf - (backdropWidth / 2) + TEXT_PADDING, m_textVertPos, kBlack, kLeft);
+		}
+		else if (align == kRight)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf + (backdropWidth / 2) - TEXT_PADDING, m_textVertPos, kBlack, kRight);
+		}
 	}
 }
 
@@ -144,11 +165,30 @@ void Game::DrawText(string text, EHorizAlignment align)
 {
 	stringstream ss{};
 	ss << text;
-
-	cout << ss.str() << endl;
+	// position it perfectly in the middle of the backdrop image
+	float m_textVertPos = m_screenHeight - (backdropHeight / 1.25);
 
 	if (!ss.str().empty())
 	{
-		m_font->Draw(ss.str(), 0, 0, kBlack, kLeft);
+		if (align == kCentre)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf, m_textVertPos, kBlack, kCentre);
+		}
+		else if (align == kLeft)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf - (backdropWidth / 2) + TEXT_PADDING, m_textVertPos, kBlack, kLeft);
+		}
+		else if (align == kRight)
+		{
+			m_font->Draw(ss.str(), m_screenHorizHalf + (backdropWidth / 2) - TEXT_PADDING, m_textVertPos, kBlack, kRight);
+		}
 	}
+}
+
+void Game::DrawScore(EHorizAlignment align)
+{
+	stringstream ss{};
+	ss << "Score: " << m_score;
+
+	DrawText(ss.str(), align);
 }

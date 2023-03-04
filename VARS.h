@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef VARS
 #define VARS
 
@@ -9,9 +11,11 @@ constexpr int fontSize = 36;
 const string fontName = "Red Hat Display";
 
 // enemy options
-const int numStaticEnemies = 4;
-const int numMovingEnemies = 4;
-const float ENEMY_RECOVERY_TIME = 15.0f;
+constexpr int numStaticEnemies = 4;
+constexpr int numMovingEnemies = 4;
+constexpr float ENEMY_RECOVERY_TIME = 15.0f;
+
+constexpr float TEXT_PADDING = 10;
 
 // locations
 const SVector3 staticEnemyLocations[numStaticEnemies] = {
@@ -86,8 +90,13 @@ const CAMERA_SETTING CAM_SETTING_CHASE = {
 
 const CAMERA_SETTING CAM_SETTING_FPP = {
 	{ 0, 0, 0 },
-	{ 0, 0.75f, 6 },
+	{ 0, 0.75f, 5 },
 	true
 };
+
+const string backdropName = "backdrop.jpg";
+const float backdropWidth = 700;
+const float backdropHeight = 60;
+
 
 #endif // VARS
