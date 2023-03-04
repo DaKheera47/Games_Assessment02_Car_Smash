@@ -93,26 +93,12 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 	if (myEngine->KeyHeld(Key_A))
 	{
 		m_model->RotateY(-m_rotationSpeed * m_currentSpeed * deltaTime);
-		//if (m_currentSpeed < 0)
-		//{
-		//	m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
-		//}
-		//else {
-		//	m_model->RotateY(-m_rotationSpeed * m_currentSpeed * deltaTime);
-		//}
 	}
 
 	// pressing d rotates the model right
 	if (myEngine->KeyHeld(Key_D))
 	{
 		m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
-		//if (m_currentSpeed < 0)
-		//{
-		//	m_model->RotateY(-m_rotationSpeed * m_currentSpeed * deltaTime);
-		//}
-		//else {
-		//	m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
-		//}
 	}
 }
 
@@ -148,4 +134,9 @@ IModel* Player::GetModel()
 float Player::GetRadius()
 {
 	return m_radius;
+}
+
+float Player::GetSpeed()
+{
+	return m_currentSpeed;
 }

@@ -57,6 +57,11 @@ void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)
 	}
 }
 
+void Game::SetGameState(GAME_STATE gameState)
+{
+	m_gameState = gameState;
+}
+
 void ApplyCameraSetting(CAMERA_SETTING setting, ICamera* camera, IModel* anchor)
 {
 	// reset orientation & position

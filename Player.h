@@ -23,6 +23,7 @@ public:
 	void SetPosition(SVector3 position);
 	void SetSpeed(float speed);
 	void UndoLastMovement();
+	float Player::GetSpeed();
 
 	SVector3 GetPostion();
 

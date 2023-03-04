@@ -92,6 +92,20 @@ void main()
 			// if paused, then don't update game elements
 			continue;
 		}
+		else if (game.GetGameState() == GAME_OVER)
+		{
+			// render game over text
+			game.DrawText("Game Over", kCentre);
+			// if game over, then don't update game elements
+			continue;
+		}
+		else if (game.GetGameState() == GAME_WON)
+		{
+			// render game won text
+			game.DrawText("Game Won", kCentre);
+			// if game won, then don't update game elements
+			continue;
+		}
 
 		// ask the game class to handle all camera angle changes
 		game.HandleCameraAngles(myEngine, camera, player.GetModel());
@@ -100,6 +114,41 @@ void main()
 		game.DrawScore(kCentre);
 
 		player.HandleMovement(myEngine, frameTime);
+
+		// check if all static enemies are dead
+		bool allEnemiesDead = true;
+		for (int i = 0; i < numStaticEnemies; i++)
+		{
+			if (!staticEnemies[i]->HasEverBeenHit())
+			{
+				allEnemiesDead = false;
+				break;
+			}
+		}
+
+		// only check moving enemies, if all static enemies are dead
+		if (allEnemiesDead)
+		{
+			// check if all moving enemies are dead
+			for (int i = 0; i < numMovingEnemies; i++)
+			{
+				if (!movingEnemies[i]->HasEverBeenHit())
+				{
+					allEnemiesDead = false;
+					break;
+				}
+			}
+		}
+
+		// if all moving enemies are dead, then the player has won
+		if (allEnemiesDead)
+		{
+			game.SetGameState(GAME_WON);
+			// render game won text
+			game.DrawText("You Won!", kCentre);
+			// if won, then don't update game elements
+			continue;
+		}
 
 		// check collision
 		for (int i = 0; i < numStaticEnemies; i++)
@@ -110,20 +159,20 @@ void main()
 
 			if (!isColliding) continue;
 
-			player.SetSpeed(0);
-			//player.UndoLastMovement();
+			// reverse direction, to simulate a bounce decrease by 75%
+			player.SetSpeed(player.GetSpeed() * -0.75f);
 
-			if (!currEnemy.HasEverBeenHit())
+			// don't continue if this enemy has been hit before
+			if (currEnemy.HasEverBeenHit()) continue;
+
+			float dotProduct = calculateDotProduct(player.GetModel(), currEnemy.GetModel());
+
+			if (dotProduct < 0.5 && dotProduct > -0.5)
 			{
-				float dotProduct = calculateDotProduct(player.GetModel(), currEnemy.GetModel());
-
-				if (dotProduct < 0.5 && dotProduct > -0.5)
-				{
-					game.UpdateScore(SIDE_IMPACT_SCORE_INCREASE);
-				}
-				else {
-					game.UpdateScore(FB_IMPACT_SCORE_INCREASE);
-				}
+				game.UpdateScore(SIDE_IMPACT_SCORE_INCREASE);
+			}
+			else {
+				game.UpdateScore(FB_IMPACT_SCORE_INCREASE);
 			}
 
 			currEnemy.HandleCollision();
@@ -138,15 +187,11 @@ void main()
 			// check collision
 			bool isColliding = BoxToSphere(player.GetRadius(), player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());
 
-			// handle collision
-			currEnemy.HandleCollision(isColliding, frameTime);
-
 			// don't continue if the enemy and player aren't colliding
 			if (!isColliding) continue;
 
-			// reset player movement, and reverst last movement for collision detection
-			player.SetSpeed(0);
-			//player.UndoLastMovement();
+			// reverse direction, to simulate a bounce decrease by 75%
+			player.SetSpeed(player.GetSpeed() * -0.75f);
 
 			// don't continue if this enemy has been hit before
 			if (currEnemy.HasEverBeenHit()) continue;
@@ -161,6 +206,9 @@ void main()
 			else {
 				game.UpdateScore(FB_IMPACT_SCORE_INCREASE);
 			}
+
+			// handle collision
+			currEnemy.HandleCollision(isColliding, frameTime);
 		}
 	}
 

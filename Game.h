@@ -17,6 +17,7 @@ public:
 	float UpdateScore(float score);
 
 	void HandleGameStates(I3DEngine* myEngine, float deltaTime);
+	void SetGameState(GAME_STATE gameState);
 	void HandleCameraAngles(I3DEngine* myEngine, ICamera* camera, IModel* anchor);
 
 	void DrawText(string text, EHorizAlignment align);
