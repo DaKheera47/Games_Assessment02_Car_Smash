@@ -44,6 +44,11 @@ Enemy::Enemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location) {
 
 Enemy::~Enemy()
 {
+	 delete m_carModel;
+	 delete m_ballModel;
+	 m_location = {};
+	 m_hasEverBeenHit = false;
+	 m_bbox = {};
 }
 
 void Enemy::Create()

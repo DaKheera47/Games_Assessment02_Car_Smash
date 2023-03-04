@@ -18,11 +18,11 @@ public:
 
 	void HandleGameStates(I3DEngine* myEngine, float deltaTime);
 	void SetGameState(GAME_STATE gameState);
+	void ResetScore();
 	void HandleCameraAngles(I3DEngine* myEngine, ICamera* camera, IModel* anchor);
 
 	void DrawText(string text, EHorizAlignment align);
 	void DrawText(float text, EHorizAlignment align);
-
 	void DrawScore(EHorizAlignment align);
 
 	~Game()

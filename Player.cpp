@@ -35,6 +35,13 @@ Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, 
 Player::~Player()
 {
 	// destructor
+	m_health = 0;
+	m_maxSpeed = 0;
+	m_acceleration = 0;
+	m_deceleration = 0;
+	m_currentSpeed = 0;
+	m_rotationSpeed = 0;
+	m_bbox = {};
 }
 
 void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)

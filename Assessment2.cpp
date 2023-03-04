@@ -59,7 +59,7 @@ void main()
 	}
 
 	// create player
-	IMesh* jeepMesh = myEngine->LoadMesh("4x4jeep.x");
+	IMesh* jeepMesh = myEngine->LoadMesh("caprice.x");
 	IModel* jeep = jeepMesh->CreateModel(initPlayerLocation.x, initPlayerLocation.y, initPlayerLocation.z);
 	Player player = Player(jeep, initPlayerHealth, initPlayerSpeed, maxPlayerSpeed, playerAcceleration, playerDeceleration);
 
@@ -85,14 +85,7 @@ void main()
 		game.HandleGameStates(myEngine, frameTime);
 
 		// don't calculate anything else
-		if (game.GetGameState() == PAUSED)
-		{
-			// render game paused text
-			game.DrawText("Game Paused", kCentre);
-			// if paused, then don't update game elements
-			continue;
-		}
-		else if (game.GetGameState() == GAME_OVER)
+		if (game.GetGameState() == GAME_OVER)
 		{
 			// render game over text
 			game.DrawText("Game Over", kCentre);
@@ -101,9 +94,51 @@ void main()
 		}
 		else if (game.GetGameState() == GAME_WON)
 		{
+			if (myEngine->KeyHit(K_RESTART))
+			{
+				// reset everything
+				for (int i = 0; i < numStaticEnemies; i++)
+				{
+					// delete enemy at index
+					delete staticEnemies[i];
+
+					StaticEnemy* enemy = new StaticEnemy(audiMesh, ballMesh, staticEnemyLocations[i]);
+					staticEnemies[i] = enemy;
+
+					// create all static enemies
+					staticEnemies[i]->Create();
+				}
+
+				for (int i = 0; i < numMovingEnemies; i++)
+				{
+					// delete enemy at index
+					delete movingEnemies[i];
+
+					movingEnemies[i] = new MovingEnemy(estateMesh, ballMesh, movingEnemyLocations[i][0], movingEnemyLocations[i][1], movingEnemyLocations[i][2]);
+
+					// create all moving enemies
+					movingEnemies[i]->Create();
+				}
+
+				// recreate player
+				player.SetPosition(initPlayerLocation);
+				//player.SetHealth(initPlayerHealth);
+				player.SetSpeed(initPlayerSpeed);
+
+				game.ResetScore();
+				game.SetGameState(PLAYING);
+			}
+
 			// render game won text
 			game.DrawText("Game Won", kCentre);
 			// if game won, then don't update game elements
+			continue;
+		}
+		else if (game.GetGameState() == PAUSED)
+		{
+			// render game paused text
+			game.DrawText("Game Paused", kCentre);
+			// if paused, then don't update game elements
 			continue;
 		}
 
@@ -126,7 +161,7 @@ void main()
 			}
 		}
 
-		// only check moving enemies, if all static enemies are dead
+		// only check moving enemies if all static enemies are dead
 		if (allEnemiesDead)
 		{
 			// check if all moving enemies are dead
@@ -212,6 +247,5 @@ void main()
 		}
 	}
 
-	// Delete the 3D engine now we are finished with it
 	myEngine->Delete();
 }

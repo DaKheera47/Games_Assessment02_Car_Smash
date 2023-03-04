@@ -69,6 +69,11 @@ const EKeyCode K_WIDE_CAM = Key_1;
 const EKeyCode K_CHASE_CAM = Key_2;
 const EKeyCode K_FPP_CAM = Key_3;
 
+const EKeyCode K_PAUSE = Key_P;
+const EKeyCode K_QUIT = Key_Escape;
+const EKeyCode K_RESTART = Key_R;
+
+
 // camera options
 const struct CAMERA_SETTING {
 	SVector3 rotation;

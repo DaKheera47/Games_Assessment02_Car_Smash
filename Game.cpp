@@ -37,13 +37,13 @@ Game::Game(I3DEngine* myEngine)
 void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)
 {
 	//  Pressing the Escape key should quit the game.
-	if (myEngine->KeyHit(Key_Escape))
+	if (myEngine->KeyHit(K_QUIT))
 	{
 		myEngine->Stop();
 	}
 
 	// game pause case
-	if (myEngine->KeyHit(Key_P))
+	if (myEngine->KeyHit(K_PAUSE))
 	{
 		// toggle paused state
 		if (m_gameState == PAUSED)
@@ -196,4 +196,9 @@ void Game::DrawScore(EHorizAlignment align)
 	ss << "Score: " << m_score;
 
 	DrawText(ss.str(), align);
+}
+
+void Game::ResetScore()
+{
+	m_score = 0;
 }
