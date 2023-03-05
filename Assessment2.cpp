@@ -75,6 +75,12 @@ void main()
 	// The main game loop, repeat until engine is stopped
 	while (myEngine->IsRunning())
 	{
+		// K_QUIT to quit
+		if (myEngine->KeyHit(K_QUIT))
+		{
+			myEngine->Stop();
+		}
+
 		// Draw the scene
 		myEngine->DrawScene();
 
@@ -196,6 +202,7 @@ void main()
 
 			// reverse direction, to simulate a bounce decrease by 75%
 			player.SetSpeed(player.GetSpeed() * -0.75f);
+			player.UndoLastMovement();
 
 			// don't continue if this enemy has been hit before
 			if (currEnemy.HasEverBeenHit()) continue;
@@ -227,6 +234,7 @@ void main()
 
 			// reverse direction, to simulate a bounce decrease by 75%
 			player.SetSpeed(player.GetSpeed() * -0.75f);
+			player.UndoLastMovement();
 
 			// don't continue if this enemy has been hit before
 			if (currEnemy.HasEverBeenHit()) continue;
