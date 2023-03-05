@@ -87,6 +87,11 @@ const struct CAMERA_SETTING {
 	bool isAnchored;
 };
 
+// moving enemy ball bouncing values
+const float BOUNCE_SPEED = 1.5f;
+const float BALL_BOUNCE_MAX = 5.5f;
+const float BALL_BOUNCE_MIN = 2.5f;
+
 const CAMERA_SETTING CAM_SETTING_WIDE = {
 	{ 15.0f, 0, 0 },
 	{ 0, 15.0f, -60.0f },

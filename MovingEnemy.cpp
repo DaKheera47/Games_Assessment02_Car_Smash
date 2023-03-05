@@ -30,6 +30,16 @@ MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 initialLocati
 	m_maxBound = maxBound;
 }
 
+MovingEnemy::~MovingEnemy() {
+	m_location = {};
+	m_hasEverBeenHit = false;
+	m_bbox = {};
+	m_state = NOT_HIT;
+	m_direction = RIGHT;
+	m_timeSinceHit = 0;
+	m_moveUp = false;
+}
+
 void MovingEnemy::FaceLeft(float frameTime)
 {
 	// reset rotation
@@ -87,6 +97,35 @@ void MovingEnemy::SetState(MOVING_ENEMY_STATE state)
 	{
 		m_hasEverBeenHit = true;
 		m_ballModel->SetSkin("red.png");
+	}
+}
+
+void MovingEnemy::BounceBall(float frameTime)
+{
+	if (m_ballModel->GetY() >= BALL_BOUNCE_MAX)
+	{
+		m_moveUp = false;
+	}
+	else if (m_ballModel->GetY() <= BALL_BOUNCE_MIN)
+	{
+		m_moveUp = true;
+	}
+
+	if (m_ballModel->GetY() <= BALL_BOUNCE_MIN && m_hasEverBeenHit)
+	{
+		m_ballModel->SetPosition(m_carModel->GetX(), BALL_BOUNCE_MIN, m_carModel->GetZ());
+		m_moveUp = true;
+		return;
+	}
+
+	if (m_moveUp)
+	{
+		// Move the ball up
+		m_ballModel->MoveY(BOUNCE_SPEED * frameTime);
+	}
+	else {
+		// Move the ball down
+		m_ballModel->MoveY(-BOUNCE_SPEED * frameTime);
 	}
 }
 
