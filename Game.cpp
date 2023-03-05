@@ -32,16 +32,30 @@ Game::Game(I3DEngine* myEngine)
 
 	// create and show backdrop.png as a sprite
 	ISprite* backdrop = myEngine->CreateSprite(backdropName, horizPos, vertPos);
+
+	float degrees = 0.0f;
+
+	IMesh* treeMesh = myEngine->LoadMesh("tree.x");
+	// make array of Tree
+	Tree trees[treeCount]{};
+
+	for (int i = 0; i < treeCount; i++)
+	{
+		float radians = kPi / 180 * degrees;
+		float x = perimeterRadius * cos(radians);
+		float y = perimeterRadius * sin(radians);
+
+		// create tree
+		trees[i].model = treeMesh->CreateModel(x, 0, y);
+		trees[i].angle = degrees;
+
+		// increment degrees
+		degrees += (360 / treeCount) + 2;
+	}
 }
 
 void Game::HandleGameStates(I3DEngine* myEngine, float deltaTime)
 {
-	//  Pressing the Escape key should quit the game.
-	if (myEngine->KeyHit(K_QUIT))
-	{
-		myEngine->Stop();
-	}
-
 	// game pause case
 	if (myEngine->KeyHit(K_PAUSE))
 	{

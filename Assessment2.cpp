@@ -59,7 +59,7 @@ void main()
 	}
 
 	// create player
-	IMesh* jeepMesh = myEngine->LoadMesh("caprice.x");
+	IMesh* jeepMesh = myEngine->LoadMesh("4x4jeep.x");
 	IModel* jeep = jeepMesh->CreateModel(initPlayerLocation.x, initPlayerLocation.y, initPlayerLocation.z);
 	Player player = Player(jeep, initPlayerHealth, initPlayerSpeed, maxPlayerSpeed, playerAcceleration, playerDeceleration);
 
@@ -201,8 +201,7 @@ void main()
 			if (!isColliding) continue;
 
 			// reverse direction, to simulate a bounce decrease by 75%
-			player.SetSpeed(player.GetSpeed() * -0.75f);
-			player.UndoLastMovement();
+			player.Bounce();
 
 			// don't continue if this enemy has been hit before
 			if (currEnemy.HasEverBeenHit()) continue;
@@ -233,8 +232,7 @@ void main()
 			if (!isColliding) continue;
 
 			// reverse direction, to simulate a bounce decrease by 75%
-			player.SetSpeed(player.GetSpeed() * -0.75f);
-			player.UndoLastMovement();
+			player.Bounce();
 
 			// don't continue if this enemy has been hit before
 			if (currEnemy.HasEverBeenHit()) continue;
@@ -252,6 +250,17 @@ void main()
 
 			// handle collision
 			currEnemy.HandleCollision(isColliding, frameTime);
+		}
+
+		const SVector3 playerPos = player.GetPostion();
+
+		// distance between 0,0,0 and player
+		float distance = sqrt(pow(playerPos.x, 2) + pow(playerPos.y, 2) + pow(playerPos.z, 2));
+
+		// if distance is greater than perimeterRadius, bounce the player
+		if (distance + player.GetRadius() > perimeterRadius)
+		{
+			player.Bounce();
 		}
 	}
 

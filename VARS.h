@@ -10,6 +10,9 @@ using namespace tle;
 constexpr int fontSize = 36;
 const string fontName = "Red Hat Display";
 
+// universal constants
+const float kPi = 3.1415926f;
+
 // enemy options
 constexpr int numStaticEnemies = 4;
 constexpr int numMovingEnemies = 4;
@@ -59,6 +62,9 @@ const float maxPlayerSpeed = 30.0f;
 const float playerAcceleration = 25.0f;
 const float playerDeceleration = 20.0f;
 const float initPlayerHealth = 100.0f;
+
+const float perimeterRadius = 50.0f;
+const int treeCount = 160;
 
 // score
 const float SIDE_IMPACT_SCORE_INCREASE = 15.0f;

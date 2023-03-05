@@ -24,6 +24,7 @@ public:
 	void SetSpeed(float speed);
 	void UndoLastMovement();
 	float Player::GetSpeed();
+	void Bounce();
 
 	SVector3 GetPostion();
 

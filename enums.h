@@ -23,6 +23,9 @@ struct BoundingBox {
 	float maxZ;
 };
 
-
+struct Tree {
+	IModel* model;
+	float angle;
+};
 
 #endif // ENUMS

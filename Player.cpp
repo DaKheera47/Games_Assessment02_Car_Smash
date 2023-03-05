@@ -29,7 +29,9 @@ Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, 
 	float centerX = (m_bbox.minX + m_bbox.maxX) / 2;
 	float centerZ = (m_bbox.minZ + m_bbox.maxZ) / 2;
 
-	m_radius = sqrt(pow(centerX - m_bbox.maxX, 2) + pow(centerZ - m_bbox.maxZ, 2));
+	m_radius = sqrt((m_bbox.maxX * m_bbox.maxX) + (m_bbox.maxZ * m_bbox.maxZ));
+	cout << "radius: " << m_radius << endl;
+
 }
 
 Player::~Player()
@@ -107,6 +109,13 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 	{
 		m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
 	}
+}
+
+void Player::Bounce()
+{
+	// reverse direction, to simulate a bounce decrease by 75%
+	SetSpeed(GetSpeed() * -0.75f);
+	UndoLastMovement();
 }
 
 SVector3 Player::GetPostion()
