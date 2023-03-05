@@ -72,7 +72,7 @@ void MovingEnemy::HandleMovement(float frameTime)
 	}
 
 	// Move the enemy left
-	m_carModel->MoveLocalZ(5.0f * frameTime);
+	m_carModel->MoveLocalZ(MOVING_ENEMY_SPEED * frameTime);
 }
 
 void MovingEnemy::SetState(MOVING_ENEMY_STATE state)

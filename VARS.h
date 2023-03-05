@@ -59,6 +59,7 @@ const SVector3 skyboxLocation = { 0, -960.0f, 0 };
 
 const float initPlayerSpeed = 0.0f;
 const float maxPlayerSpeed = 30.0f;
+const float MOVING_ENEMY_SPEED = maxPlayerSpeed * 0.5;
 const float playerAcceleration = 25.0f;
 const float playerDeceleration = 20.0f;
 const float initPlayerHealth = 100.0f;
@@ -78,7 +79,6 @@ const EKeyCode K_FPP_CAM = Key_3;
 const EKeyCode K_PAUSE = Key_P;
 const EKeyCode K_QUIT = Key_Escape;
 const EKeyCode K_RESTART = Key_R;
-
 
 // camera options
 const struct CAMERA_SETTING {
