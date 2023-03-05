@@ -6,24 +6,40 @@
 using namespace tle;
 
 #include "enums.h";
+#include "StaticEnemy.h"
+#include "MovingEnemy.h"
+#include "Player.h";
+#include "VARS.h";
 
 class Game
 {
 public:
-	Game::Game(I3DEngine* myEngine);
+	Game::Game();
 
 	GAME_STATE GetGameState();
+	I3DEngine* GetEngine();
 	float GetScore();
 	float UpdateScore(float score);
 
-	void HandleGameStates(I3DEngine* myEngine, float deltaTime);
+	void HandleGameStates(float deltaTime);
+	void HandlePlayerMovement(float deltaTime);
 	void SetGameState(GAME_STATE gameState);
 	void ResetScore();
-	void HandleCameraAngles(I3DEngine* myEngine, ICamera* camera, IModel* anchor);
+	void HandleCameraAngles();
 
 	void DrawText(string text, EHorizAlignment align);
 	void DrawText(float text, EHorizAlignment align);
-	void DrawScore(EHorizAlignment align);
+	void DrawHUD();
+
+	bool CheckGameOver();
+	bool CheckGameWon();
+
+	void RestartGame();
+	void ValidatePlayerPosition();
+
+	// collisions
+	void HandleStaticCollisions();
+	void HandleMovingCollisions(float deltaTime);
 
 	~Game()
 	{
@@ -41,6 +57,20 @@ private:
 	float m_screenHeight;
 	float m_screenHorizHalf;
 	float m_screenVertHalf;
+
+	I3DEngine* m_engine;
+	Player m_player;
+	ICamera* m_camera;
+
+	// enemy arrays
+	StaticEnemy* m_staticEnemies[numStaticEnemies];
+	MovingEnemy* m_movingEnemies[numMovingEnemies];
+	
+	// meshes
+	IMesh* m_estateMesh;
+	IMesh* m_audiMesh;
+	IMesh* m_ballMesh;
+	
 };
 
 

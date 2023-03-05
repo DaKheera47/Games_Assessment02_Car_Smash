@@ -10,6 +10,8 @@ using namespace tle;
 class Player
 {
 public:
+	// default constructor
+	Player();
 	// constructor
 	Player(IModel* model, float health, float currentSpeed, float maxSpeed, float acceleration, float deceleration);
 
@@ -25,6 +27,9 @@ public:
 	void UndoLastMovement();
 	float Player::GetSpeed();
 	void Bounce();
+	float GetHealth();
+	float UpdateHealth(float health);
+	float SetHealth(float health);
 
 	SVector3 GetPostion();
 

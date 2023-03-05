@@ -6,6 +6,19 @@ using namespace tle;
 #include "Player.h";
 #include "dev.h";
 
+// default constructor
+Player::Player()
+{
+	m_model = nullptr;
+	m_health = 0;
+	m_currentSpeed = 0;
+	m_maxSpeed = 0;
+	m_acceleration = 0;
+	m_deceleration = 0;
+	m_rotationSpeed = 0;
+	m_radius = 0;
+}
+
 Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, float acceleration, float deceleration)
 {
 	// constructor
@@ -155,4 +168,22 @@ float Player::GetRadius()
 float Player::GetSpeed()
 {
 	return m_currentSpeed;
+}
+
+// get health
+float Player::GetHealth()
+{
+	return m_health;
+}
+
+float Player::UpdateHealth(float health)
+{
+	m_health += health;
+	return m_health;
+}
+
+float Player::SetHealth(float health)
+{
+	m_health = health;
+	return m_health;
 }

@@ -77,3 +77,13 @@ bool BoxToSphere(float sphereRad, IModel* sphereObj, IModel* boxObj, BoundingBox
 
 	return BoxToPoint(objSimulatedBBox, spherePos);
 }
+
+float calculateDistance(SVector3 point1, SVector3 point2)
+{
+	// calculate distance between two points, x, y, z, using SVector3
+	const float xDiff = point1.x - point2.x;
+	const float yDiff = point1.y - point2.y;
+	const float zDiff = point1.z - point2.z;
+
+	return sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+}
