@@ -12,9 +12,11 @@ public:
 	Enemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location);
 
 	~Enemy();
-	void HandleCollision();
+	void HandleCollision(COLLISION_DIRECTION direction);
 	void Create();
 	bool HasEverBeenHit();
+	void scaleX(float factor);
+	void scaleZ(float factor);
 	BoundingBox GetBBox();
 	IModel* GetModel();
 

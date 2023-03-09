@@ -5,6 +5,7 @@ using namespace tle;
 
 #include "helpers.h";
 #include "enums.h";
+#include "VARS.h"
 
 Enemy::Enemy()
 {
@@ -44,11 +45,11 @@ Enemy::Enemy(IMesh* carMesh, IMesh* ballMesh, SVector3 location) {
 
 Enemy::~Enemy()
 {
-	 delete m_carModel;
-	 delete m_ballModel;
-	 m_location = {};
-	 m_hasEverBeenHit = false;
-	 m_bbox = {};
+	delete m_carModel;
+	delete m_ballModel;
+	m_location = {};
+	m_hasEverBeenHit = false;
+	m_bbox = {};
 }
 
 void Enemy::Create()
@@ -59,11 +60,20 @@ void Enemy::Create()
 	m_ballModel->AttachToParent(m_carModel);
 }
 
-void Enemy::HandleCollision()
+void Enemy::HandleCollision(COLLISION_DIRECTION direction)
 {
-	if (m_hasEverBeenHit == false) {
-		m_hasEverBeenHit = true;
-		m_ballModel->SetSkin("red.png");
+	if (m_hasEverBeenHit) return;
+
+	m_hasEverBeenHit = true;
+	m_ballModel->SetSkin("red.png");
+
+	if (direction == SIDE_IMPACT)
+	{
+		scaleX(IMPACT_SCALE_FACTOR);
+	}
+	else if (direction == FB_IMPACT)
+	{
+		scaleZ(IMPACT_SCALE_FACTOR);
 	}
 }
 
@@ -80,4 +90,40 @@ IModel* Enemy::GetModel()
 BoundingBox Enemy::GetBBox()
 {
 	return m_bbox;
+}
+
+void Enemy::scaleX(float factor)
+{
+	//declare a 4x4 matrix
+	float matrix[4][4];
+
+	//assign the car's matrix to the declared array 
+	m_carModel->GetMatrix(&matrix[0][0]);
+
+	// scale in x axis by the factor
+	for (int i = 0; i < 4; i++)
+	{
+		matrix[0][i] *= factor;
+	}
+
+	//assign the array to the car's matrix
+	m_carModel->SetMatrix(&matrix[0][0]);
+}
+
+void Enemy::scaleZ(float factor)
+{
+	//declare a 4x4 matrix
+	float matrix[4][4];
+
+	//assign the car's matrix to the declared array 
+	m_carModel->GetMatrix(&matrix[0][0]);
+
+	// scale in z axis by the factor
+	for (int i = 0; i < 4; i++)
+	{
+		matrix[2][i] *= factor;
+	}
+
+	//assign the array to the car's matrix
+	m_carModel->SetMatrix(&matrix[0][0]);
 }

@@ -413,17 +413,18 @@ void Game::HandleStaticCollisions()
 		// don't continue if this enemy has been hit before
 		if (currEnemy.HasEverBeenHit()) continue;
 
+		// calculate dot product, and then give score based on that
 		float dotProduct = calculateDotProduct(m_player.GetModel(), currEnemy.GetModel());
 
 		if (dotProduct < 0.5 && dotProduct > -0.5)
 		{
 			m_score += SIDE_IMPACT_SCORE_INCREASE;
+			currEnemy.HandleCollision(SIDE_IMPACT);
 		}
 		else {
 			m_score += FB_IMPACT_SCORE_INCREASE;
+			currEnemy.HandleCollision(FB_IMPACT);
 		}
-
-		currEnemy.HandleCollision();
 	}
 }
 

@@ -19,7 +19,7 @@ public:
 	void BounceBall(float frameTime);
 
 private:
-	DIRECTION m_direction = RIGHT;
+	MOVEMENT_DIRECTION m_direction = RIGHT;
 	SVector3 m_minBound;
 	SVector3 m_maxBound;
 	float m_timeSinceHit = 0;

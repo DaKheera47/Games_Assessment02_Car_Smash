@@ -117,5 +117,7 @@ const float backdropHeight = 60;
 
 // damage values
 const float OUT_OF_BOUNDS_DAMAGE = 10.0f;
+// scaling on car model when hit
+const float IMPACT_SCALE_FACTOR = 0.5f;
 
 #endif // VARS
