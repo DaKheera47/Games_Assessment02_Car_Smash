@@ -5,6 +5,7 @@
 using namespace tle;
 
 #include "enums.h";
+#include "VARS.h";
 
 
 class Player

@@ -87,3 +87,23 @@ float calculateDistance(SVector3 point1, SVector3 point2)
 
 	return sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
 }
+
+// takes double and truncates to specific digits after the decimal
+string truncateDecimal(double preciseNum, int precision)
+{
+	// https://stackoverflow.com/a/55769967/11815481
+	string numStringed = to_string(preciseNum);
+
+	// .find returns the index of the decimal point in the string
+	// need the set precision + 1 to get the expected value
+	int lengthAfterDecimal = numStringed.find(".") + precision + 1;
+
+	// if precision is 0, then the decimal point is not needed
+	if (precision == 0)
+	{
+		lengthAfterDecimal--;
+	}
+
+	// split the string from the start to the length of the string after being truncated
+	return numStringed.substr(0, lengthAfterDecimal);
+}

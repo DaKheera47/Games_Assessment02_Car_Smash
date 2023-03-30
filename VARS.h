@@ -58,6 +58,7 @@ const SVector3 initPlayerLocation = ORIGIN;
 const SVector3 skyboxLocation = { 0, -960.0f, 0 };
 
 const float initPlayerSpeed = 0.0f;
+const float CRAWL_SPEED = 0.5f;
 const float maxPlayerSpeed = 30.0f;
 const float MOVING_ENEMY_SPEED = maxPlayerSpeed * 0.5;
 const float playerAcceleration = 25.0f;

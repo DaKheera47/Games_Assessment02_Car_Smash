@@ -269,6 +269,10 @@ void Game::DrawHUD()
 	ss.str("");
 	ss << "Health: " << m_player.GetHealth();
 	DrawText(ss.str(), kLeft);
+
+	ss.str("");
+	ss << "Speed: " << truncateDecimal((m_player.GetSpeed() / maxPlayerSpeed) * 100, 0) << "%";
+	DrawText(ss.str(), kRight);
 }
 
 void Game::ResetScore()
@@ -386,7 +390,7 @@ void Game::ValidatePlayerPosition()
 	const SVector3 playerPos = m_player.GetPostion();
 
 	// distance between 0,0,0 and player
-	float distance = calculateDistance({ 0,0,0 }, playerPos);
+	float distance = calculateDistance({ 0, 0, 0 }, playerPos);
 
 	// if distance is greater than perimeterRadius, bounce the player
 	if (distance + m_player.GetRadius() > perimeterRadius)
@@ -451,7 +455,6 @@ void Game::HandleMovingCollisions(float deltaTime)
 		// don't continue if the enemy and player aren't colliding
 		if (!isColliding) continue;
 
-		// reverse direction, to simulate a bounce decrease by 75%
 		m_player.Bounce();
 
 		// don't continue if this enemy has been hit before

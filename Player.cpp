@@ -126,9 +126,13 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 
 void Player::Bounce()
 {
+	if (m_currentSpeed > -CRAWL_SPEED && m_currentSpeed < CRAWL_SPEED) {
+		return;
+	}
+
+	UndoLastMovement();
 	// reverse direction, to simulate a bounce decrease by 75%
 	SetSpeed(GetSpeed() * -0.75f);
-	UndoLastMovement();
 }
 
 SVector3 Player::GetPostion()
