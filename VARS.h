@@ -81,6 +81,7 @@ const EKeyCode K_QUIT = Key_Escape;
 const EKeyCode K_RESTART = Key_R;
 
 // camera options
+// rotation vector, position vector, is anchored to player
 const struct CAMERA_SETTING {
 	SVector3 rotation;
 	SVector3 position;
@@ -118,6 +119,6 @@ const float backdropHeight = 60;
 // damage values
 const float OUT_OF_BOUNDS_DAMAGE = 10.0f;
 // scaling on car model when hit
-const float IMPACT_SCALE_FACTOR = 0.5f;
+const float IMPACT_SCALE_FACTOR = 0.8f;
 
 #endif // VARS

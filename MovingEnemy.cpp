@@ -129,6 +129,18 @@ void MovingEnemy::BounceBall(float frameTime)
 	}
 }
 
+SVector3 MovingEnemy::GetFacingVector()
+{
+	SVector3 facingVector = { 0, 0, 0 };
+
+	// use the get facing vector function from helpers
+	calculateFacingVector(m_carModel, facingVector);
+
+	m_facingVector = facingVector;
+
+	return m_facingVector;
+}
+
 void MovingEnemy::HandleCollision(bool isColliding, float frameTime)
 {
 	if (m_hasEverBeenHit)

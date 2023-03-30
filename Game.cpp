@@ -269,6 +269,10 @@ void Game::DrawHUD()
 	ss.str("");
 	ss << "Health: " << m_player.GetHealth();
 	DrawText(ss.str(), kLeft);
+
+	ss.str("");
+	ss << "Speed: " << truncateDecimal((m_player.GetSpeed() / maxPlayerSpeed) * 100, 0) << "%";
+	DrawText(ss.str(), kRight);
 }
 
 void Game::ResetScore()
@@ -440,10 +444,11 @@ void Game::HandleMovingCollisions(float deltaTime)
 		// check collision
 		bool isColliding = BoxToSphere(m_player.GetRadius(), m_player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());
 
-		// don't continue if the enemy and player aren't colliding
+		// handle collision
+		currEnemy.HandleCollision(isColliding, deltaTime);
+
 		if (!isColliding) continue;
 
-		// reverse direction, to simulate a bounce decrease by 75%
 		m_player.Bounce();
 
 		// don't continue if this enemy has been hit before
@@ -460,8 +465,5 @@ void Game::HandleMovingCollisions(float deltaTime)
 			m_score += FB_IMPACT_SCORE_INCREASE;
 		}
 
-		// handle collision
-		currEnemy.HandleCollision(isColliding, deltaTime);
 	}
-
 }

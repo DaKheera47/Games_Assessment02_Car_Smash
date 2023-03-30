@@ -17,6 +17,7 @@ public:
 	void FaceRight(float frameTime);
 	void SetState(MOVING_ENEMY_STATE state);
 	void BounceBall(float frameTime);
+	SVector3 GetFacingVector();
 
 private:
 	MOVEMENT_DIRECTION m_direction = RIGHT;
@@ -24,6 +25,7 @@ private:
 	SVector3 m_maxBound;
 	float m_timeSinceHit = 0;
 	MOVING_ENEMY_STATE m_state = NOT_HIT;
+	SVector3 m_facingVector;
 
 	bool m_moveUp = false;
 };
