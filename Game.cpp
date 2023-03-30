@@ -428,7 +428,7 @@ void Game::HandleStaticCollisions()
 	}
 }
 
-void Game::HandleMovingCollisions(float deltaTime)
+void Game::HandleEnemyMovement(float deltaTime)
 {
 	for (int i = 0; i < numMovingEnemies; i++)
 	{
@@ -436,6 +436,14 @@ void Game::HandleMovingCollisions(float deltaTime)
 
 		currEnemy.HandleMovement(deltaTime);
 		currEnemy.BounceBall(deltaTime);
+	}
+}
+
+void Game::HandleMovingCollisions(float deltaTime)
+{
+	for (int i = 0; i < numMovingEnemies; i++)
+	{
+		MovingEnemy& currEnemy = *m_movingEnemies[i];
 
 		// check collision
 		bool isColliding = BoxToSphere(m_player.GetRadius(), m_player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());

@@ -83,6 +83,9 @@ void main()
 		game.HandleStaticCollisions();
 		game.HandleMovingCollisions(frameTime);
 
+		// handling enemy movement each frame
+		game.HandleEnemyMovement(frameTime);
+
 		// handle the player going out of bounds
 		game.ValidatePlayerPosition();
 	}

@@ -40,6 +40,7 @@ public:
 	// collisions
 	void HandleStaticCollisions();
 	void HandleMovingCollisions(float deltaTime);
+	void HandleEnemyMovement(float deltatTime);
 
 	~Game()
 	{

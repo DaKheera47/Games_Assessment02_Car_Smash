@@ -1,3 +1,6 @@
+#include <TL-Engine.h>
+using namespace tle;
+
 #ifndef ENUMS
 #define ENUMS
 
@@ -8,8 +11,7 @@ enum MOVEMENT_DIRECTION { LEFT, RIGHT };
 enum MOVING_ENEMY_STATE { HIT, NOT_HIT };
 enum COLLISION_DIRECTION { SIDE_IMPACT, FB_IMPACT };
 
-struct SVector3
-{
+struct SVector3 {
 	float x;
 	float y;
 	float z;

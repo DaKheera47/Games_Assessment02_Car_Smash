@@ -133,11 +133,11 @@ void Player::Bounce()
 
 SVector3 Player::GetPostion()
 {
-	SVector3 position;
-	position.x = m_model->GetX();
-	position.y = m_model->GetY();
-	position.z = m_model->GetZ();
-	return position;
+	return {
+		m_model->GetX(),
+		m_model->GetY(),
+		m_model->GetZ()
+	};
 }
 
 void Player::SetPosition(SVector3 position)
