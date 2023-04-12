@@ -121,4 +121,13 @@ const float OUT_OF_BOUNDS_DAMAGE = 10.0f;
 // scaling on car model when hit
 const float IMPACT_SCALE_FACTOR = 0.5f;
 
+// particle options
+const int P_NUM = 200;
+const float P_EMIT_INTERVAL = 0.05;
+const float P_LIFETIME = 0.5;
+const float P_GRAVITY = -10.0f;
+const float P_VERTICALITY = 3;
+const float P_MIN_EMIT_INTERVAL = 0.0f; // Minimum time between emissions (e.g., when the player is at max speed)
+const float P_MAX_EMIT_INTERVAL = 0.05f;  // Maximum time between emissions (e.g., when the player is stopped)
+
 #endif // VARS

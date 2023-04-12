@@ -3,6 +3,7 @@
 #include <TL-Engine.h>	// TL-Engine include file and namespace
 #include <iostream>
 #include <array>
+#include <ctime> // For time()
 using namespace tle;
 
 #include "Player.h";
@@ -15,6 +16,9 @@ using namespace tle;
 
 void main()
 {
+	// Seed the random number generator
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	// encapsulates most game states & other global actions
 	Game game = Game();
 
@@ -88,5 +92,8 @@ void main()
 
 		// handle the player going out of bounds
 		game.ValidatePlayerPosition();
+
+		// handle particle effects
+		game.HandleParticles();
 	}
 }

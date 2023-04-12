@@ -17,6 +17,18 @@ struct SVector3 {
 	float z;
 };
 
+struct SVector2 {
+	float x;
+	float y;
+};
+
+struct Particle {
+	IModel* model;
+	SVector3 movementVector;
+	bool isEmitted = false;
+	float lifetime = 0.0f;
+};
+
 struct BoundingBox {
 	float minX;
 	float maxX;

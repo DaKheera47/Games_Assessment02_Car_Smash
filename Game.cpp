@@ -19,8 +19,6 @@ Game::Game()
 	m_engine->AddMediaFolder("C:\\ProgramData\\TL-Engine\\Media");
 	m_engine->AddMediaFolder(".\\media");
 
-	m_font = m_engine->LoadFont("Red Hat Display", 36);
-
 	m_gameState = PLAYING;
 	m_cameraAngle = CHASE;
 	m_score = 0;
@@ -101,10 +99,18 @@ Game::Game()
 		// increment degrees
 		degrees += (360 / treeCount) + 2;
 	}
+
+	m_sphereMesh = m_engine->LoadMesh("sphere.x");
+
+	// instantiate emitters
+	Emitter* m_leftEmitter = new Emitter(m_engine, m_player);
+	Emitter* m_rightEmitter = new Emitter(m_engine, m_player);
 }
 
 void Game::HandleGameStates(float deltaTime)
 {
+	m_frametime = deltaTime;
+
 	// game pause case
 	if (m_engine->KeyHit(K_PAUSE))
 	{
@@ -474,5 +480,32 @@ void Game::HandleMovingCollisions(float deltaTime)
 		// handle collision
 		currEnemy.HandleCollision(isColliding, deltaTime);
 	}
+}
 
+void Game::HandleParticles()
+{
+	SVector3 playerPos = m_player.GetPostion();
+
+	// get player model
+	IModel* playerModel = m_player.GetModel();
+	// get back left and back right wheel nodes
+	ISceneNode* BRWheel = playerModel->GetNode(7);
+	ISceneNode* BLWheel = playerModel->GetNode(6);
+
+	// get position of back left and back right wheel nodes
+	SVector3 BRPos = {
+		BRWheel->GetX(),
+		BRWheel->GetY(),
+		BRWheel->GetZ()
+	};
+	SVector3 BLPos = {
+		BLWheel->GetX(),
+		BLWheel->GetY(),
+		BLWheel->GetZ()
+	};
+
+	float speedPc = abs(m_player.GetSpeed()) / maxPlayerSpeed;
+
+	m_leftEmitter.Update(m_frametime, BRPos, m_engine, m_sphereMesh, playerPos, speedPc);
+	m_rightEmitter.Update(m_frametime, BLPos, m_engine, m_sphereMesh, playerPos, speedPc);
 }

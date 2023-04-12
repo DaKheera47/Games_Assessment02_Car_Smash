@@ -29,6 +29,7 @@ public:
 	float Player::GetSpeed();
 	void Bounce();
 	float GetHealth();
+	BoundingBox GetBBox();
 	float UpdateHealth(float health);
 	float SetHealth(float health);
 

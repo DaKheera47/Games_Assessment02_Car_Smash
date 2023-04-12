@@ -186,6 +186,11 @@ float Player::UpdateHealth(float health)
 	return m_health;
 }
 
+BoundingBox Player::GetBBox()
+{
+	return m_bbox;
+}
+
 float Player::SetHealth(float health)
 {
 	m_health = health;

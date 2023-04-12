@@ -1,6 +1,8 @@
 #include <math.h>
 #include <utility>
 #include <iostream>
+#include <cstdlib> // For rand() function
+#include <ctime>   // For seeding the random number generator
 using namespace std;
 
 #include <TL-Engine.h>
@@ -106,4 +108,20 @@ string truncateDecimal(double preciseNum, int precision)
 
 	// split the string from the start to the length of the string after being truncated
 	return numStringed.substr(0, lengthAfterDecimal);
+}
+
+// Returns a random float value between rangeMin and rangeMax, inclusive
+// rangeMin <= random number <= rangeMax
+float generateRandomFloat(float rangeMin, float rangeMax)
+{
+	// Generate a random float value between 0 and 1
+	float randomValue = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+
+	// Scale the random value to the desired range
+	float result = randomValue * (rangeMax - rangeMin);
+
+	// Offset the result by the minimum value of the range
+	result += rangeMin;
+
+	return result;
 }
