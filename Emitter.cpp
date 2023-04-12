@@ -55,7 +55,7 @@ void Emitter::Update(float frametime, SVector3 emitterPos, I3DEngine* myEngine, 
 			p.isEmitted = false;
 		}
 
-		if (!p.isEmitted && speedPercentage > 0.0f && timeSinceLastEmit >= P_EMIT_INTERVAL * (1.0f / (1.0f + speedPercentage))) {
+		if (!p.isEmitted && speedPercentage > SPEED_DEADZONE && timeSinceLastEmit >= P_EMIT_INTERVAL * (1.0f / (1.0f + speedPercentage))) {
 			float xComponent = generateRandomFloat(-10, 10) * 0.1f;
 			float yComponent = generateRandomFloat(25, 50) * 0.1f;
 			float zComponent = generateRandomFloat(-10, 10) * 0.1f;

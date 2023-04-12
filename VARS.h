@@ -61,9 +61,14 @@ const float initPlayerSpeed = 0.0f;
 const float CRAWL_SPEED = 0.5f;
 const float maxPlayerSpeed = 30.0f;
 const float MOVING_ENEMY_SPEED = maxPlayerSpeed * 0.5;
-const float playerAcceleration = 25.0f;
-const float playerDeceleration = 20.0f;
+const float playerAcceleration = 0.20f;
+const float playerDeceleration = 0.20f;
+const float playerDrag = -playerAcceleration * 0.05f;
 const float initPlayerHealth = 100.0f;
+const float ROTATION_SPEED = 75.0f;
+
+const float MOMENTUM_FACTOR = 1.75f;
+const float SPEED_DEADZONE = 0.1f;
 
 const float perimeterRadius = 50.0f;
 const int treeCount = 160;

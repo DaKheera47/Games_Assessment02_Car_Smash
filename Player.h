@@ -2,6 +2,7 @@
 #define PLAYER
 
 #include <TL-Engine.h>
+#include <vector>
 using namespace tle;
 
 #include "enums.h";
@@ -44,6 +45,11 @@ private:
 	float m_rotationSpeed;
 	float m_radius;
 	float m_wheelRadius;
+	float m_thrustScale = 100.0f;
+
+	float m_frictionCoefficient = 0.005f;
+
+	SVector3 m_thrust, m_momentum, m_oldMomentum, m_drag = { 0, 0, 0 };
 
 	ISceneNode* m_wheels[4];
 

@@ -333,7 +333,7 @@ void Game::RestartGame()
 
 void Game::HandlePlayerMovement(float deltaTime)
 {
-	m_player.HandleMovement(m_engine, deltaTime);
+	m_player.HandleMovement(m_engine, m_frametime);
 }
 
 bool Game::CheckGameOver()

@@ -5,6 +5,7 @@ using namespace tle;
 //#include "helpers.h";
 #include "Player.h";
 #include "dev.h";
+#include "helpers.h"
 
 // default constructor
 Player::Player()
@@ -28,7 +29,7 @@ Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, 
 	m_acceleration = acceleration;
 	m_deceleration = deceleration;
 	m_currentSpeed = currentSpeed;
-	m_rotationSpeed = 5.0f;
+	m_rotationSpeed = ROTATION_SPEED;
 
 	m_bbox.minX = -0.946118f;
 	m_bbox.maxX = 0.946118f;
@@ -70,6 +71,7 @@ Player::~Player()
 	m_bbox = {};
 }
 
+
 float GetRotationX(tle::ISceneNode* model)
 {
 	float matrix[4][4];
@@ -83,55 +85,43 @@ float GetRotationX(tle::ISceneNode* model)
 
 void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 {
-	m_prevPosition = { m_model->GetX(), m_model->GetY(), m_model->GetZ() };
+	float carPos[4][4];
+	m_model->GetMatrix(&carPos[0][0]);
+	SVector3 localZ = { carPos[2][0], carPos[2][1], carPos[2][2] };
 
-	// pressing w increases speed my acceleration, until max speed is reached
 	if (myEngine->KeyHeld(Key_W))
 	{
-		// going backward, pressing forward is twice the acceleration
-		if (m_currentSpeed < m_maxSpeed && m_currentSpeed < 0)
-		{
-			m_currentSpeed += m_acceleration * 2 * deltaTime;
-		}
-		else if (m_currentSpeed < m_maxSpeed && m_currentSpeed >= 0)
-		{
-			m_currentSpeed += m_acceleration * deltaTime;
-		}
+		m_thrust = { localZ.x * m_acceleration, localZ.y * m_acceleration, localZ.z * m_acceleration };
 	}
-
-	// pressing s decreases speed by deceleration, until 0 is reached
-	if (myEngine->KeyHeld(Key_S))
+	else if (myEngine->KeyHeld(Key_S))
 	{
-		// going forward, pressing reverse is twice the deceleration
-		if (m_currentSpeed > -m_maxSpeed && m_currentSpeed > 0)
-		{
-			m_currentSpeed -= m_acceleration * 2 * deltaTime;
-		}
-		else if (m_currentSpeed > -m_maxSpeed && m_currentSpeed <= 0)
-		{
-			m_currentSpeed -= m_acceleration * deltaTime;
-		}
+		m_thrust = { localZ.x * -m_deceleration, localZ.y * -m_deceleration, localZ.z * -m_deceleration };
+	}
+	else
+	{
+		m_thrust = { 0, 0, 0 };
 	}
 
-	if (!myEngine->KeyHeld(Key_W) && !myEngine->KeyHeld(Key_S)) {
-		if (round(m_currentSpeed) == 0)
-		{
-			m_currentSpeed = 0;
-		}
-		else if (m_currentSpeed > 0)
-		{
-			m_currentSpeed -= m_deceleration * deltaTime;
-		}
-		else if (m_currentSpeed < 0)
-		{
-			m_currentSpeed += m_deceleration * deltaTime;
-		}
-	}
+	m_drag = {
+		m_oldMomentum.x * playerDrag,
+		m_oldMomentum.y * playerDrag,
+		m_oldMomentum.z * playerDrag
+	};
 
-	// don't rotate, or move if speed is 0
-	if (m_currentSpeed == 0) return;
+	m_momentum = {
+		m_thrust.x + m_oldMomentum.x + m_drag.x,
+		m_thrust.y + m_oldMomentum.y + m_drag.y,
+		m_thrust.z + m_oldMomentum.z + m_drag.z
+	};
 
-	m_model->MoveLocalZ(m_currentSpeed * deltaTime);
+	m_oldMomentum = m_momentum;
+
+	// move model
+	m_model->Move((m_momentum.x * MOMENTUM_FACTOR) * deltaTime, (m_momentum.y * MOMENTUM_FACTOR) * deltaTime, (m_momentum.z * MOMENTUM_FACTOR) * deltaTime);
+
+	m_currentSpeed = sqrt(m_momentum.x * m_momentum.x + m_momentum.y * m_momentum.y + m_momentum.z * m_momentum.z);
+
+	if (m_currentSpeed <= SPEED_DEADZONE && m_currentSpeed >= -SPEED_DEADZONE) return;
 
 	// Calculate wheel rotation based on speed
 	float wheelRotation = (m_currentSpeed * deltaTime) / (m_wheelRadius * 2.0f * kPi) * 360.0f;
@@ -140,14 +130,14 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 	// pressing a rotates the model left
 	if (myEngine->KeyHeld(Key_A))
 	{
-		m_model->RotateY(-m_rotationSpeed * m_currentSpeed * deltaTime);
+		m_model->RotateY(-m_rotationSpeed * deltaTime);
 		steeringAngle = -MAX_STEERING_ANGLE; // Adjust this value based on the desired steering angle
 	}
 
 	// pressing d rotates the model right
 	if (myEngine->KeyHeld(Key_D))
 	{
-		m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
+		m_model->RotateY(m_rotationSpeed * deltaTime);
 		steeringAngle = MAX_STEERING_ANGLE; // Adjust this value based on the desired steering angle
 	}
 

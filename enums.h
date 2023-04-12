@@ -12,9 +12,9 @@ enum MOVING_ENEMY_STATE { HIT, NOT_HIT };
 enum COLLISION_DIRECTION { SIDE_IMPACT, FB_IMPACT };
 
 struct SVector3 {
-	float x;
-	float y;
-	float z;
+	float x = 0;
+	float y = 0;
+	float z = 0;
 };
 
 struct SVector2 {
