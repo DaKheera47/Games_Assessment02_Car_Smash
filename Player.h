@@ -43,9 +43,12 @@ private:
 	float m_currentSpeed;
 	float m_rotationSpeed;
 	float m_radius;
+	float m_wheelRadius;
+
+	ISceneNode* m_wheels[4];
 
 	SVector3 m_prevPosition;
-	
+
 	IModel* m_model;
 	BoundingBox m_bbox;
 };

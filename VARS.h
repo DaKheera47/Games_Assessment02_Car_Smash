@@ -130,4 +130,6 @@ const float P_VERTICALITY = 3;
 const float P_MIN_EMIT_INTERVAL = 0.0f; // Minimum time between emissions (e.g., when the player is at max speed)
 const float P_MAX_EMIT_INTERVAL = 0.05f;  // Maximum time between emissions (e.g., when the player is stopped)
 
+const float MAX_STEERING_ANGLE = 30.0f;
+
 #endif // VARS

@@ -43,8 +43,19 @@ Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, 
 	float centerZ = (m_bbox.minZ + m_bbox.maxZ) / 2;
 
 	m_radius = sqrt((m_bbox.maxX * m_bbox.maxX) + (m_bbox.maxZ * m_bbox.maxZ));
-	cout << "radius: " << m_radius << endl;
 
+	// get the wheels
+	ISceneNode* FLWheel = m_model->GetNode(4);
+	ISceneNode* FRWheel = m_model->GetNode(5);
+	ISceneNode* BLWheel = m_model->GetNode(6);
+	ISceneNode* BRWheel = m_model->GetNode(7);
+
+	m_wheels[0] = FLWheel;
+	m_wheels[1] = FRWheel;
+	m_wheels[2] = BLWheel;
+	m_wheels[3] = BRWheel;
+
+	m_wheelRadius = 0.5f;
 }
 
 Player::~Player()
@@ -57,6 +68,17 @@ Player::~Player()
 	m_currentSpeed = 0;
 	m_rotationSpeed = 0;
 	m_bbox = {};
+}
+
+float GetRotationX(tle::ISceneNode* model)
+{
+	float matrix[4][4];
+	model->GetMatrix(&matrix[0][0]);
+
+	// Calculate the rotation angle from the matrix
+	float rotationX = atan2f(matrix[1][2], matrix[2][2]) * (180.0f / kPi);
+
+	return rotationX;
 }
 
 void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
@@ -111,16 +133,35 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 
 	m_model->MoveLocalZ(m_currentSpeed * deltaTime);
 
+	// Calculate wheel rotation based on speed
+	float wheelRotation = (m_currentSpeed * deltaTime) / (m_wheelRadius * 2.0f * kPi) * 360.0f;
+	float steeringAngle = 0.0f;
+
 	// pressing a rotates the model left
 	if (myEngine->KeyHeld(Key_A))
 	{
 		m_model->RotateY(-m_rotationSpeed * m_currentSpeed * deltaTime);
+		steeringAngle = -MAX_STEERING_ANGLE; // Adjust this value based on the desired steering angle
 	}
 
 	// pressing d rotates the model right
 	if (myEngine->KeyHeld(Key_D))
 	{
 		m_model->RotateY(m_rotationSpeed * m_currentSpeed * deltaTime);
+		steeringAngle = MAX_STEERING_ANGLE; // Adjust this value based on the desired steering angle
+	}
+
+	// Set the steering angle for the front wheels and keep the current rotation around the X-axis
+	for (int i = 0; i < 2; ++i) {
+		float currentXRotation = GetRotationX(m_wheels[i]);
+		m_wheels[i]->ResetOrientation();
+		m_wheels[i]->RotateY(steeringAngle);
+		m_wheels[i]->RotateLocalX(currentXRotation);
+	}
+
+	// Rotate all wheels based on speed
+	for (int i = 0; i < 4; ++i) {
+		m_wheels[i]->RotateLocalX(wheelRotation);
 	}
 }
 
