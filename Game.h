@@ -39,7 +39,7 @@ public:
 	void ValidatePlayerPosition();
 
 	// collisions
-	void HandleStaticCollisions();
+	void HandleEnemyCollisions();
 	void HandleMovingCollisions(float deltaTime);
 	void HandleEnemyMovement(float deltatTime);
 

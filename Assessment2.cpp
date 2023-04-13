@@ -84,8 +84,7 @@ void main()
 		if (game.CheckGameWon()) continue;
 
 		// handle collisions
-		game.HandleStaticCollisions();
-		game.HandleMovingCollisions(frameTime);
+		game.HandleEnemyCollisions();
 
 		// handling enemy movement each frame
 		game.HandleEnemyMovement(frameTime);

@@ -16,7 +16,7 @@ const float kPi = 3.1415926f;
 // enemy options
 constexpr int numStaticEnemies = 4;
 constexpr int numMovingEnemies = 4;
-constexpr float ENEMY_RECOVERY_TIME = 150.0f;
+constexpr float ENEMY_RECOVERY_TIME = 15.0f;
 
 constexpr float TEXT_PADDING = 10;
 

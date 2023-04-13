@@ -401,40 +401,24 @@ void Game::ValidatePlayerPosition()
 	// if distance is greater than perimeterRadius, bounce the player
 	if (distance + m_player.GetRadius() > perimeterRadius)
 	{
-		m_player.Bounce();
+		m_player.Bounce(NONE);
 		m_player.UpdateHealth(-OUT_OF_BOUNDS_DAMAGE);
 	}
 }
 
-void Game::HandleStaticCollisions()
+void Game::HandleEnemyCollisions()
 {
 	// check collision
 	for (int i = 0; i < numStaticEnemies; i++)
 	{
 		StaticEnemy& currEnemy = *m_staticEnemies[i];
+		m_player.HandleCollision(currEnemy, m_frametime, m_score);
+	}
 
-		bool isColliding = BoxToSphere(m_player.GetRadius(), m_player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());
-
-		if (!isColliding) continue;
-
-		// reverse direction, to simulate a bounce decrease by 75%
-		m_player.Bounce();
-
-		// don't continue if this enemy has been hit before
-		if (currEnemy.HasEverBeenHit()) continue;
-
-		// calculate dot product, and then give score based on that
-		float dotProduct = calculateDotProduct(m_player.GetModel(), currEnemy.GetModel());
-
-		if (dotProduct < 0.5 && dotProduct > -0.5)
-		{
-			m_score += SIDE_IMPACT_SCORE_INCREASE;
-			currEnemy.HandleCollision(SIDE_IMPACT);
-		}
-		else {
-			m_score += FB_IMPACT_SCORE_INCREASE;
-			currEnemy.HandleCollision(FB_IMPACT);
-		}
+	for (int i = 0; i < numMovingEnemies; i++)
+	{
+		MovingEnemy& currEnemy = *m_movingEnemies[i];
+		m_player.HandleCollision(currEnemy, m_frametime, m_score);
 	}
 }
 
@@ -446,39 +430,6 @@ void Game::HandleEnemyMovement(float deltaTime)
 
 		currEnemy.HandleMovement(deltaTime);
 		currEnemy.BounceBall(deltaTime);
-	}
-}
-
-void Game::HandleMovingCollisions(float deltaTime)
-{
-	for (int i = 0; i < numMovingEnemies; i++)
-	{
-		MovingEnemy& currEnemy = *m_movingEnemies[i];
-
-		// check collision
-		bool isColliding = BoxToSphere(m_player.GetRadius(), m_player.GetModel(), currEnemy.GetModel(), currEnemy.GetBBox());
-
-		// don't continue if the enemy and player aren't colliding
-		if (!isColliding) continue;
-
-		m_player.Bounce();
-
-		// don't continue if this enemy has been hit before
-		if (currEnemy.HasEverBeenHit()) continue;
-
-		// calculate dot product, and add points based on that
-		float dotProduct = calculateDotProduct(m_player.GetModel(), currEnemy.GetModel());
-
-		if (dotProduct < 0.5 && dotProduct > -0.5)
-		{
-			m_score += SIDE_IMPACT_SCORE_INCREASE;
-		}
-		else {
-			m_score += FB_IMPACT_SCORE_INCREASE;
-		}
-
-		// handle collision
-		currEnemy.HandleCollision(isColliding, deltaTime);
 	}
 }
 

@@ -7,6 +7,9 @@ using namespace tle;
 
 #include "enums.h";
 #include "VARS.h";
+#include "Enemy.h"
+#include "StaticEnemy.h"
+#include "MovingEnemy.h"
 
 
 class Player
@@ -27,12 +30,16 @@ public:
 	void SetPosition(SVector3 position);
 	void SetSpeed(float speed);
 	void UndoLastMovement();
-	float Player::GetSpeed();
-	void Bounce();
+	float GetSpeed();
 	float GetHealth();
 	BoundingBox GetBBox();
 	float UpdateHealth(float health);
 	float SetHealth(float health);
+
+	// Bounce
+	void Bounce(COLLISION_AXIS axis);
+	void HandleCollision(StaticEnemy& enemy, float deltaTime, float& score);
+	void HandleCollision(MovingEnemy& enemy, float deltaTime, float& score);
 
 	SVector3 GetPostion();
 

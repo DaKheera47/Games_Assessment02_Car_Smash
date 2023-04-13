@@ -57,10 +57,10 @@ bool BoxToPoint(BoundingBox box, SVector3 point)
 }
 
 // sphere to box
-bool BoxToSphere(float sphereRad, IModel* sphereObj, IModel* boxObj, BoundingBox boxBBox)
+COLLISION_AXIS BoxToSphere(float sphereRad, IModel* sphereObj, IModel* boxObj, BoundingBox boxBBox)
 {
-	SVector3 spherePos = { sphereObj->GetX(), sphereObj->GetY(), sphereObj->GetZ() };
-	SVector3 boxPos = { boxObj->GetX(), boxObj->GetY(), boxObj->GetZ() };
+	const SVector3 spherePos = { sphereObj->GetX(), sphereObj->GetY(), sphereObj->GetZ() };
+	const SVector3 boxPos = { boxObj->GetX(), boxObj->GetY(), boxObj->GetZ() };
 
 	// bounding box edge lengths
 	SVector3 boxLengths{};
@@ -68,7 +68,7 @@ bool BoxToSphere(float sphereRad, IModel* sphereObj, IModel* boxObj, BoundingBox
 	boxLengths.y = boxBBox.maxY - boxBBox.minY;
 	boxLengths.z = boxBBox.maxZ - boxBBox.minZ;
 
-	BoundingBox objSimulatedBBox{
+	const BoundingBox objSimulatedBBox{
 		boxPos.x - boxLengths.x / 2 - sphereRad,
 		boxPos.x + boxLengths.x / 2 + sphereRad,
 		boxPos.y - boxLengths.y / 2 - sphereRad,
@@ -77,7 +77,22 @@ bool BoxToSphere(float sphereRad, IModel* sphereObj, IModel* boxObj, BoundingBox
 		boxPos.z + boxLengths.z / 2 + sphereRad
 	};
 
-	return BoxToPoint(objSimulatedBBox, spherePos);
+	if (spherePos.x > objSimulatedBBox.minX && spherePos.x < objSimulatedBBox.maxX)
+	{
+		if (spherePos.z > objSimulatedBBox.minZ && spherePos.z < objSimulatedBBox.maxZ)
+		{
+			if (spherePos.x > objSimulatedBBox.minX && spherePos.x < objSimulatedBBox.maxX)
+			{
+				return X_AXIS;
+			}
+			else if (spherePos.z > objSimulatedBBox.minZ && spherePos.z < objSimulatedBBox.maxZ)
+			{
+				return Z_AXIS;
+			}
+		}
+	}
+
+	return NONE;
 }
 
 float calculateDistance(SVector3 point1, SVector3 point2)

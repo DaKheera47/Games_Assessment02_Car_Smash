@@ -85,6 +85,8 @@ float GetRotationX(tle::ISceneNode* model)
 
 void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 {
+	m_prevPosition = { m_model->GetX(), m_model->GetY(), m_model->GetZ() };
+
 	float carPos[4][4];
 	m_model->GetMatrix(&carPos[0][0]);
 	SVector3 localZ = { carPos[2][0], carPos[2][1], carPos[2][2] };
@@ -155,15 +157,63 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 	}
 }
 
-void Player::Bounce()
+void Player::Bounce(COLLISION_AXIS axis)
 {
-	if (m_currentSpeed > -CRAWL_SPEED && m_currentSpeed < CRAWL_SPEED) {
-		return;
-	}
+	m_oldMomentum.x *= -1 * 0.75;
+	m_oldMomentum.z *= -1 * 0.75;
+}
 
-	UndoLastMovement();
+void Player::HandleCollision(MovingEnemy& enemy, float frametime, float& score)
+{
+	COLLISION_AXIS collisionAxis = BoxToSphere(m_radius, m_model, enemy.GetModel(), enemy.GetBBox());
+
+	enemy.HandleCollision(collisionAxis != NONE, frametime);
+
+	if (collisionAxis == NONE) return;
+
 	// reverse direction, to simulate a bounce decrease by 75%
-	SetSpeed(GetSpeed() * -0.75f);
+	Bounce(collisionAxis);
+
+	// don't continue if this enemy has been hit before
+	if (enemy.HasEverBeenHit()) return;
+
+	// calculate dot product, and then give score based on that
+	float dotProduct = calculateDotProduct(m_model, enemy.GetModel());
+
+	if (dotProduct < 0.5 && dotProduct > -0.5)
+	{
+		score += SIDE_IMPACT_SCORE_INCREASE;
+	}
+	else {
+		score += FB_IMPACT_SCORE_INCREASE;
+	}
+}
+
+
+void Player::HandleCollision(StaticEnemy& enemy, float frametime, float& score)
+{
+	COLLISION_AXIS collisionAxis = BoxToSphere(m_radius, m_model, enemy.GetModel(), enemy.GetBBox());
+
+	if (collisionAxis == NONE) return;
+
+	// reverse direction, to simulate a bounce decrease by 75%
+	Bounce(collisionAxis);
+
+	// don't continue if this enemy has been hit before
+	if (enemy.HasEverBeenHit()) return;
+
+	// calculate dot product, and then give score based on that
+	float dotProduct = calculateDotProduct(m_model, enemy.GetModel());
+
+	if (dotProduct < 0.5 && dotProduct > -0.5)
+	{
+		score += SIDE_IMPACT_SCORE_INCREASE;
+		enemy.HandleCollision(SIDE_IMPACT);
+	}
+	else {
+		score += FB_IMPACT_SCORE_INCREASE;
+		enemy.HandleCollision(FB_IMPACT);
+	}
 }
 
 SVector3 Player::GetPostion()
