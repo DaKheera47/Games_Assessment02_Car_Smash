@@ -85,11 +85,13 @@ void MovingEnemy::SetState(MOVING_ENEMY_STATE state)
 		m_hasEverBeenHit = false;
 		m_ballModel->SetSkin("white.png");
 		m_timeSinceHit = 0.0f;
+		m_state = NOT_HIT;
 	}
 	else if (state == HIT)
 	{
 		m_hasEverBeenHit = true;
 		m_ballModel->SetSkin("red.png");
+		m_state = HIT;
 	}
 }
 
@@ -122,20 +124,28 @@ void MovingEnemy::BounceBall(float frameTime)
 	}
 }
 
-void MovingEnemy::HandleCollision(bool isColliding, float frameTime)
+MOVING_ENEMY_STATE MovingEnemy::GetState()
+{
+	return m_state;
+}
+
+void MovingEnemy::HandleUpdates(float frameTime)
 {
 	if (m_hasEverBeenHit)
 	{
 		m_timeSinceHit += frameTime;
 	}
 
+	// if the enemy has been hit, and the time since the enemy has been hit is greater than 15 seconds, reset the enemy
 	if (m_timeSinceHit > ENEMY_RECOVERY_TIME) {
 		SetState(NOT_HIT);
 	}
+}
 
+void MovingEnemy::HandleCollision(bool isColliding, float frameTime)
+{
 	if (!isColliding) return;
 
-	// if the enemy has been hit, and the time since the enemy has been hit is greater than 15 seconds, reset the enemy
 	if (m_hasEverBeenHit == false) {
 		SetState(HIT);
 	}

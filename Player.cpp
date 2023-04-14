@@ -173,7 +173,7 @@ void Player::HandleCollision(MovingEnemy& enemy, float frametime, float& score)
 {
 	COLLISION_AXIS collisionAxis = BoxToSphere(m_radius, m_model, enemy.GetModel(), enemy.GetBBox());
 
-	enemy.HandleCollision(collisionAxis != NONE, frametime);
+	enemy.HandleUpdates(frametime);
 
 	if (collisionAxis == NONE) return;
 
@@ -181,18 +181,20 @@ void Player::HandleCollision(MovingEnemy& enemy, float frametime, float& score)
 	Bounce(collisionAxis);
 
 	// don't continue if this enemy has been hit before
-	if (enemy.HasEverBeenHit()) return;
+	if (!enemy.HasEverBeenHit()) {
+		// calculate dot product, and then give score based on that
+		float dotProduct = calculateDotProduct(m_model, enemy.GetModel());
 
-	// calculate dot product, and then give score based on that
-	float dotProduct = calculateDotProduct(m_model, enemy.GetModel());
+		if (dotProduct < 0.5 && dotProduct > -0.5)
+		{
+			score += SIDE_IMPACT_SCORE_INCREASE;
+		}
+		else {
+			score += FB_IMPACT_SCORE_INCREASE;
+		}
+	}
 
-	if (dotProduct < 0.5 && dotProduct > -0.5)
-	{
-		score += SIDE_IMPACT_SCORE_INCREASE;
-	}
-	else {
-		score += FB_IMPACT_SCORE_INCREASE;
-	}
+	enemy.HandleCollision(collisionAxis != NONE, frametime);
 }
 
 

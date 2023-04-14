@@ -17,6 +17,9 @@ public:
 	void FaceRight(float frameTime);
 	void SetState(MOVING_ENEMY_STATE state);
 	void BounceBall(float frameTime);
+	MOVING_ENEMY_STATE GetState();
+
+	void HandleUpdates(float frameTime);
 
 private:
 	MOVEMENT_DIRECTION m_direction = RIGHT;
