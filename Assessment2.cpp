@@ -3,6 +3,7 @@
 #include <TL-Engine.h>	// TL-Engine include file and namespace
 #include <iostream>
 #include <array>
+#include <sstream>
 #include <ctime> // For time()
 using namespace tle;
 
@@ -57,6 +58,10 @@ void main()
 			game.RestartGame();
 			// render game won text
 			game.DrawText("Game Won", kCentre);
+			// final score
+			stringstream ss{};
+			ss << "Final Score: " << game.GetScore();
+			game.DrawText(ss.str(), kRight);
 			// if game won, then don't update game elements
 			continue;
 		}

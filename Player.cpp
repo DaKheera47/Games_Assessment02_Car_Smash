@@ -157,6 +157,12 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 	}
 }
 
+void Player::SetMomentum(SVector3 momentum)
+{
+	m_momentum = momentum;
+	m_oldMomentum = momentum;
+}
+
 void Player::Bounce(COLLISION_AXIS axis)
 {
 	m_oldMomentum.x *= -1 * BOUNCE_FACTOR;

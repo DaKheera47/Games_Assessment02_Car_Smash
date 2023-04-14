@@ -324,6 +324,7 @@ void Game::RestartGame()
 		m_player.SetPosition(initPlayerLocation);
 		m_player.SetHealth(initPlayerHealth);
 		m_player.SetSpeed(initPlayerSpeed);
+		m_player.SetMomentum({0, 0, 0});
 		m_player.GetModel()->ResetOrientation();
 
 		ResetScore();

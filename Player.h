@@ -35,6 +35,7 @@ public:
 	BoundingBox GetBBox();
 	float UpdateHealth(float health);
 	float SetHealth(float health);
+	void SetMomentum(SVector3 momentum);
 
 	// Bounce
 	void Bounce(COLLISION_AXIS axis);
