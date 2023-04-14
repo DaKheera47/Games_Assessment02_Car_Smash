@@ -13,10 +13,10 @@ using namespace tle;
 void calculateFacingVector(IModel* model, SVector3& facingVector)
 {
 	SVector3 initialPos = { model->GetX(), model->GetY(), model->GetZ() };
-	model->MoveLocalZ(1.0f);
+	model->MoveLocalZ(FACING_VECTOR_OFFSET);
 	SVector3 finalPos = { model->GetX(), model->GetY(), model->GetZ() };
 	facingVector = { finalPos.x - initialPos.x, finalPos.y - initialPos.y, finalPos.z - initialPos.z };
-	model->MoveLocalZ(-1.0f);
+	model->MoveLocalZ(-FACING_VECTOR_OFFSET);
 }
 
 float calculateDotProduct(IModel* boxObj, IModel* sphereObj)
@@ -113,7 +113,7 @@ string truncateDecimal(double preciseNum, int precision)
 
 	// .find returns the index of the decimal point in the string
 	// need the set precision + 1 to get the expected value
-	int lengthAfterDecimal = numStringed.find(".") + precision + 1;
+	int lengthAfterDecimal = numStringed.find(".") + precision + additionalLength;
 
 	// if precision is 0, then the decimal point is not needed
 	if (precision == 0)

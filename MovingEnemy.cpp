@@ -10,21 +10,14 @@ using namespace tle;
 
 MovingEnemy::MovingEnemy(IMesh* carMesh, IMesh* ballMesh, SVector3 initialLocation, SVector3 minBound, SVector3 maxBound)
 	: Enemy(carMesh, ballMesh, initialLocation) {
-	float minX = -0.946118f;
-	float maxX = 0.946118f;
-	float minY = 0.0065695f;
-	float maxY = 1.50131f;
-	float minZ = -1.97237f;
-	float maxZ = 1.97237f;
-
-	m_bbox.minX = minX;
-	m_bbox.maxX = maxX;
-
-	m_bbox.minY = minY;
-	m_bbox.maxY = maxY;
-
-	m_bbox.minZ = minZ;
-	m_bbox.maxZ = maxZ;
+	m_bbox = {
+		MOVING_ENEMY_MIN_X,
+		MOVING_ENEMY_MAX_X,
+		MOVING_ENEMY_MIN_Y,
+		MOVING_ENEMY_MAX_Y,
+		MOVING_ENEMY_MIN_Z,
+		MOVING_ENEMY_MAX_Z
+	};
 
 	m_minBound = minBound;
 	m_maxBound = maxBound;
@@ -46,7 +39,7 @@ void MovingEnemy::FaceLeft(float frameTime)
 	m_carModel->ResetOrientation();
 
 	// rotate the enemy
-	m_carModel->RotateY(-90.0f);
+	m_carModel->RotateY(LEFTWARDS_ANGLE);
 }
 
 void MovingEnemy::FaceRight(float frameTime)
@@ -55,7 +48,7 @@ void MovingEnemy::FaceRight(float frameTime)
 	m_carModel->ResetOrientation();
 
 	// rotate the enemy
-	m_carModel->RotateY(90.0f);
+	m_carModel->RotateY(RIGHTWARDS_ANGLE);
 }
 
 void MovingEnemy::HandleMovement(float frameTime)

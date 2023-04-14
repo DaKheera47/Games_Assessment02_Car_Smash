@@ -56,7 +56,7 @@ Player::Player(IModel* model, float health, float currentSpeed, float maxSpeed, 
 	m_wheels[2] = BLWheel;
 	m_wheels[3] = BRWheel;
 
-	m_wheelRadius = 0.5f;
+	m_wheelRadius = CAR_WHEEL_RADIUS;
 }
 
 Player::~Player()
@@ -159,8 +159,8 @@ void Player::HandleMovement(I3DEngine* myEngine, float deltaTime)
 
 void Player::Bounce(COLLISION_AXIS axis)
 {
-	m_oldMomentum.x *= -1 * 0.75;
-	m_oldMomentum.z *= -1 * 0.75;
+	m_oldMomentum.x *= -1 * BOUNCE_FACTOR;
+	m_oldMomentum.z *= -1 * BOUNCE_FACTOR;
 }
 
 void Player::HandleCollision(MovingEnemy& enemy, float frametime, float& score)

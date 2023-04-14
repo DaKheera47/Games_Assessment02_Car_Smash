@@ -66,9 +66,11 @@ const float playerDeceleration = 0.20f;
 const float playerDrag = -playerAcceleration * 0.05f;
 const float initPlayerHealth = 100.0f;
 const float ROTATION_SPEED = 75.0f;
+const float CAR_WHEEL_RADIUS = 0.5f;
 
 const float MOMENTUM_FACTOR = 1.75f;
 const float SPEED_DEADZONE = 0.1f;
+const float BOUNCE_FACTOR = 0.75f;
 
 const float perimeterRadius = 50.0f;
 const int treeCount = 160;
@@ -136,5 +138,31 @@ const float P_MIN_EMIT_INTERVAL = 0.0f; // Minimum time between emissions (e.g.,
 const float P_MAX_EMIT_INTERVAL = 0.05f;  // Maximum time between emissions (e.g., when the player is stopped)
 
 const float MAX_STEERING_ANGLE = 30.0f;
+
+// movement angles
+const float LEFTWARDS_ANGLE = -90.0f;
+const float RIGHTWARDS_ANGLE = 90.0f;
+
+// how far to move a model to calculate it's facing vector
+const float FACING_VECTOR_OFFSET = 1.0f;
+
+// used in truncate the decimal function
+const int additionalLength = 1;
+
+// static enemy BBox
+const float STATIC_ENEMY_MIN_X = -0.946118f;
+const float STATIC_ENEMY_MAX_X = 0.946118f;
+const float STATIC_ENEMY_MIN_Y = 0.0065695f;
+const float STATIC_ENEMY_MAX_Y = 1.50131f;
+const float STATIC_ENEMY_MIN_Z = -1.97237f;
+const float STATIC_ENEMY_MAX_Z = 1.97237f;
+
+// Moving enemy BBox
+const float MOVING_ENEMY_MIN_X = -0.946118f;
+const float MOVING_ENEMY_MAX_X = 0.946118f;
+const float MOVING_ENEMY_MIN_Y = 0.0065695f;
+const float MOVING_ENEMY_MAX_Y = 1.50131f;
+const float MOVING_ENEMY_MIN_Z = -1.97237f;
+const float MOVING_ENEMY_MAX_Z = 1.97237f;
 
 #endif // VARS

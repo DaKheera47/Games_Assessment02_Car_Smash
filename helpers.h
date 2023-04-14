@@ -2,7 +2,9 @@
 #ifndef HELPERS
 #define HELPERS
 
-#include "enums.h";
+#include "enums.h"
+#include "VARS.h"
+
 #include <TL-Engine.h>
 using namespace tle;
 

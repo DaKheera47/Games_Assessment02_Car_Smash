@@ -30,6 +30,15 @@ struct Particle {
 	float lifetime = 0.0f;
 };
 
+
+/*
+* minX
+* maxX
+* minY
+* maxY
+* minZ
+* maxZ
+*/
 struct BoundingBox {
 	float minX;
 	float maxX;
